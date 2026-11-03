@@ -1,0 +1,274 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620">
+  <defs>
+    <!-- Background & Ambient -->
+    <radialGradient id="envGlow" cx="68%" cy="65%" r="75%">
+      <stop offset="0%" stop-color="#142c4b"/>
+      <stop offset="45%" stop-color="#0a1728"/>
+      <stop offset="100%" stop-color="#040912"/>
+    </radialGradient>
+    <radialGradient id="arcCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="15%" stop-color="#d4f7ff"/>
+      <stop offset="40%" stop-color="#38bdf8"/>
+      <stop offset="70%" stop-color="#0284c7" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0369a1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hotSpot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#ffe494"/>
+      <stop offset="65%" stop-color="#efad2d" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#efad2d" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- 3D Metallic Shading Gradients -->
+    <linearGradient id="robotOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe599"/>
+      <stop offset="25%" stop-color="#f59e0b"/>
+      <stop offset="65%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+    <linearGradient id="robotDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="steelTube3D" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="20%" stop-color="#cbd5e1"/>
+      <stop offset="55%" stop-color="#64748b"/>
+      <stop offset="85%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="tubeTopFace" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="laserBeam" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.1"/>
+    </linearGradient>
+
+    <!-- Drop Shadows & Glow Filters -->
+    <filter id="glowArc" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Deep Industrial Canvas -->
+  <rect width="900" height="620" rx="20" fill="url(#envGlow)"/>
+
+  <!-- Isometric 3D High-Tech Shopfloor Grid -->
+  <g opacity="0.22" stroke="#38bdf8" stroke-width="1.2">
+    <!-- Perspective Floor Grid Lines -->
+    <line x1="50" y1="570" x2="850" y2="570"/>
+    <line x1="70" y1="530" x2="830" y2="530"/>
+    <line x1="100" y1="495" x2="800" y2="495"/>
+    <line x1="130" y1="465" x2="770" y2="465"/>
+    <line x1="160" y1="440" x2="740" y2="440"/>
+    
+    <!-- Vanishing Lines converging upward -->
+    <line x1="100" y1="620" x2="350" y2="420"/>
+    <line x1="220" y1="620" x2="410" y2="420"/>
+    <line x1="360" y1="620" x2="480" y2="420"/>
+    <line x1="520" y1="620" x2="560" y2="420"/>
+    <line x1="680" y1="620" x2="630" y2="420"/>
+    <line x1="820" y1="620" x2="700" y2="420"/>
+  </g>
+
+  <!-- Ambient Floor Shadows -->
+  <ellipse cx="260" cy="535" rx="140" ry="26" fill="#000000" opacity="0.65" filter="url(#glowArc)"/>
+  <ellipse cx="660" cy="535" rx="190" ry="32" fill="#000000" opacity="0.75" filter="url(#glowArc)"/>
+
+  <!-- ==========================================
+       ISOMETRIC 3D MODULAR FIXTURE TABLE & BUS SEAT FRAME
+       ========================================== -->
+  <g id="fixtureTable" filter="url(#softShadow)">
+    <!-- 3D Table Top Plate -->
+    <!-- Top Face -->
+    <polygon points="460,450 820,430 870,470 510,490" fill="#243447" stroke="#475569" stroke-width="1.5"/>
+    <!-- Front Face -->
+    <polygon points="510,490 870,470 870,505 510,525" fill="#131e2b" stroke="#334155" stroke-width="1.5"/>
+    <!-- Left Face -->
+    <polygon points="460,450 510,490 510,525 460,485" fill="#1b293a" stroke="#334155" stroke-width="1.5"/>
+
+    <!-- Grid Holes on Fixture Table (Siegmund / Demmeler style 3D system) -->
+    <g fill="#0b131e" stroke="#38bdf8" stroke-width="0.8" opacity="0.4">
+      <ellipse cx="540" cy="470" rx="4" ry="2"/>
+      <ellipse cx="600" cy="466" rx="4" ry="2"/>
+      <ellipse cx="660" cy="462" rx="4" ry="2"/>
+      <ellipse cx="720" cy="458" rx="4" ry="2"/>
+      <ellipse cx="780" cy="454" rx="4" ry="2"/>
+      <ellipse cx="570" cy="482" rx="4" ry="2"/>
+      <ellipse cx="630" cy="478" rx="4" ry="2"/>
+      <ellipse cx="690" cy="474" rx="4" ry="2"/>
+      <ellipse cx="750" cy="470" rx="4" ry="2"/>
+      <ellipse cx="810" cy="466" rx="4" ry="2"/>
+    </g>
+
+    <!-- Heavy Table Legs -->
+    <rect x="525" y="520" width="22" height="42" fill="#172332" stroke="#334155"/>
+    <rect x="840" y="500" width="22" height="52" fill="#101925" stroke="#334155"/>
+    <rect x="475" y="480" width="20" height="50" fill="#172332" stroke="#334155"/>
+    <rect x="795" y="460" width="20" height="48" fill="#101925" stroke="#334155"/>
+  </g>
+
+  <!-- 3D Welded Automotive Bus Seat Tubular Frame (Clamped on Table) -->
+  <g id="weldedComponent" filter="url(#softShadow)">
+    <!-- Bottom Isometric Tube Rails -->
+    <path d="M540 458 L770 445 L795 465 L565 478 Z" fill="url(#steelTube3D)" stroke="#94a3b8" stroke-width="2"/>
+    
+    <!-- Upright Tubular Risers (Isometric 3D) -->
+    <path d="M555 460 L555 365 L575 363 L575 458 Z" fill="url(#steelTube3D)" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M750 445 L750 350 L770 348 L770 443 Z" fill="url(#steelTube3D)" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M640 452 L640 358 L660 356 L660 450 Z" fill="url(#steelTube3D)" stroke="#94a3b8" stroke-width="2"/>
+
+    <!-- Top Ergonomic Cross Member (3D Tube with Round Contour) -->
+    <path d="M550 365 Q660 345 775 348 L775 362 Q660 359 550 379 Z" fill="url(#steelTube3D)" stroke="#cbd5e1" stroke-width="2"/>
+
+    <!-- Heavy Floor Anchor Plates & Gussets (Pre-drilled mounting slots) -->
+    <polygon points="530,470 565,468 575,482 540,484" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
+    <polygon points="760,455 795,453 805,467 770,469" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
+
+    <!-- Pneumatic Clamping Jigs (Holding Frame in Place) -->
+    <rect x="532" y="435" width="14" height="28" fill="#efad2d" stroke="#b45309" stroke-width="1"/>
+    <circle cx="539" cy="438" r="4" fill="#1e293b"/>
+    <rect x="762" y="420" width="14" height="28" fill="#efad2d" stroke="#b45309" stroke-width="1"/>
+    <circle cx="769" cy="423" r="4" fill="#1e293b"/>
+  </g>
+
+  <!-- ==========================================
+       6-AXIS HIGH-TECH INDUSTRIAL ROBOTIC ARM
+       ========================================== -->
+  <g id="roboticArm" filter="url(#softShadow)">
+    <!-- Base Pedestal Column -->
+    <!-- Base Mounting Flange -->
+    <ellipse cx="240" cy="510" rx="95" ry="24" fill="#1e293b" stroke="#475569" stroke-width="3"/>
+    <ellipse cx="240" cy="502" rx="90" ry="20" fill="#334155" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Pedestal Cylindrical Column -->
+    <path d="M165 375 L315 375 L325 500 L155 500 Z" fill="url(#robotDark)" stroke="#475569" stroke-width="3"/>
+    <ellipse cx="240" cy="375" rx="75" ry="16" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+
+    <!-- Rotating Turret (Axis 1) -->
+    <path d="M185 320 L295 320 L305 375 L175 375 Z" fill="url(#robotOrange)" stroke="#92400e" stroke-width="2"/>
+    <ellipse cx="240" cy="320" rx="55" ry="14" fill="#fef08a" stroke="#d97706" stroke-width="2"/>
+
+    <!-- Axis 2 Pivot Shoulder Casting -->
+    <circle cx="240" cy="300" r="46" fill="url(#robotDark)" stroke="#64748b" stroke-width="5"/>
+    <circle cx="240" cy="300" r="34" fill="url(#robotOrange)" stroke="#b45309" stroke-width="2"/>
+    <circle cx="240" cy="300" r="14" fill="#0f172a" stroke="#ffd875" stroke-width="3"/>
+
+    <!-- Hydraulic Balance Cylinder alongside arm -->
+    <path d="M220 300 L320 200 L332 210 L232 310 Z" fill="#475569" stroke="#94a3b8" stroke-width="1.5"/>
+    <circle cx="225" cy="305" r="7" fill="#cbd5e1"/>
+    <circle cx="326" cy="205" r="7" fill="#cbd5e1"/>
+
+    <!-- Primary Arm Casting (Axis 2 to Axis 3) -->
+    <polygon points="230,285 365,165 405,185 270,305" fill="url(#robotOrange)" stroke="#92400e" stroke-width="3"/>
+    <!-- Specular Highlight Strip along Arm -->
+    <polygon points="245,285 370,172 380,177 255,290" fill="#ffffff" opacity="0.45"/>
+
+    <!-- Axis 3 Elbow Joint Assembly -->
+    <circle cx="385" cy="175" r="42" fill="url(#robotDark)" stroke="#64748b" stroke-width="5"/>
+    <circle cx="385" cy="175" r="30" fill="url(#robotOrange)" stroke="#b45309" stroke-width="2"/>
+    <circle cx="385" cy="175" r="12" fill="#0f172a" stroke="#ffd875" stroke-width="3"/>
+
+    <!-- Forearm Casting (Axis 3 to Axis 4 & 5) -->
+    <polygon points="385,160 560,225 550,260 375,195" fill="url(#robotOrange)" stroke="#92400e" stroke-width="3"/>
+    <polygon points="395,168 555,230 550,238 390,176" fill="#ffffff" opacity="0.4"/>
+
+    <!-- Flexible Cable Management Harness Loop -->
+    <path d="M260 360 Q340 320 365 240 Q390 160 480 200 Q530 220 560 250" fill="none" stroke="#0f172a" stroke-width="10" stroke-linecap="round"/>
+    <path d="M260 360 Q340 320 365 240 Q390 160 480 200 Q530 220 560 250" fill="none" stroke="#334155" stroke-width="7" stroke-dasharray="8 4" stroke-linecap="round"/>
+
+    <!-- Axis 4 & 5 Wrist Articulator -->
+    <circle cx="560" cy="245" r="28" fill="url(#robotDark)" stroke="#64748b" stroke-width="4"/>
+    <circle cx="560" cy="245" r="18" fill="url(#robotOrange)" stroke="#b45309" stroke-width="2"/>
+    <circle cx="560" cy="245" r="7" fill="#0f172a"/>
+
+    <!-- Axis 6 Tool Mounting Flange & MIG Welding Torch Neck -->
+    <polygon points="565,240 645,325 630,335 550,250" fill="url(#robotDark)" stroke="#64748b" stroke-width="2"/>
+    
+    <!-- Water-cooled MIG Torch Body -->
+    <path d="M640 320 L685 365 L672 378 L627 333 Z" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+    <!-- Gas Shroud & Ceramic Nozzle -->
+    <path d="M685 365 L705 385 L695 395 L675 375 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
+    <!-- Contact Tip & Wire Electrode -->
+    <line x1="702" y1="388" x2="715" y2="402" stroke="#efad2d" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Optical Laser Seam Tracker Guide Beam -->
+    <line x1="680" y1="345" x2="720" y2="400" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3 3"/>
+    <circle cx="720" cy="400" r="3" fill="#f43f5e"/>
+  </g>
+
+  <!-- ==========================================
+       PLASMA ELECTRIC ARC, MOLTEN POOL & SPARKS
+       ========================================== -->
+  <!-- Molten Weld Seam Glow onto Frame Tube -->
+  <path d="M690 392 Q715 402 735 405" stroke="#efad2d" stroke-width="6" stroke-linecap="round" opacity="0.9" filter="url(#glowArc)"/>
+
+  <!-- Multi-layered High Energy Plasma Halo -->
+  <circle cx="715" cy="402" r="110" fill="url(#arcCore)" filter="url(#glowArc)"/>
+  <circle cx="715" cy="402" r="45" fill="url(#hotSpot)" filter="url(#glowArc)"/>
+  <circle cx="715" cy="402" r="14" fill="#ffffff" filter="url(#glowArc)"/>
+
+  <!-- Electric Arc Plasma Tendrils -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="none">
+    <path d="M710 398 L715 402 L722 396"/>
+    <path d="M715 402 L708 410 L718 414"/>
+    <path d="M715 402 L726 408"/>
+  </g>
+
+  <!-- Dynamic Flying Molten Sparks (Parabolic trajectories) -->
+  <g fill="#ffe599" stroke="#efad2d" stroke-width="0.8">
+    <circle cx="740" cy="380" r="2.5"/>
+    <circle cx="765" cy="360" r="1.8"/>
+    <circle cx="780" cy="390" r="2.2"/>
+    <circle cx="750" cy="425" r="2.0"/>
+    <circle cx="730" cy="435" r="1.8"/>
+    <circle cx="680" cy="430" r="2.2"/>
+    <circle cx="660" cy="410" r="1.5"/>
+    <circle cx="695" cy="370" r="2.0"/>
+    <circle cx="810" cy="375" r="1.5"/>
+    <circle cx="790" cy="420" r="1.8"/>
+  </g>
+  <!-- Spark Motion Streak Trails -->
+  <path d="M715 402 Q745 375 780 390" fill="none" stroke="#ffd875" stroke-width="1.2" opacity="0.7"/>
+  <path d="M715 402 Q750 420 790 420" fill="none" stroke="#ffd875" stroke-width="1" opacity="0.6"/>
+  <path d="M715 402 Q680 435 655 420" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+
+  <!-- ==========================================
+       TECHNICAL HUD & TELEMETRY OVERLAY (3D Industrial Look - Zero Overlap)
+       ========================================== -->
+  <!-- Left Header Badge & Title -->
+  <g transform="translate(42, 36)">
+    <rect width="195" height="26" rx="13" fill="#0c1d32" stroke="#efad2d" stroke-width="1.2"/>
+    <circle cx="16" cy="13" r="4" fill="#10b981"/>
+    <text x="28" y="17" fill="#ffd875" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="1.2">ROBOTIC WELD CELL</text>
+    
+    <text x="0" y="54" fill="#f8fafc" font-family="'Barlow Condensed', Arial, sans-serif" font-size="28" font-weight="900" letter-spacing="0.5">AUTOMATED 6-AXIS MIG</text>
+  </g>
+
+  <!-- High-Tech Telemetry Chips in Top Right (Positioned with 340px Clear Gap) -->
+  <g transform="translate(660, 36)">
+    <rect width="200" height="54" rx="8" fill="#081423" stroke="#38bdf8" stroke-width="1.2" opacity="0.95"/>
+    <circle cx="16" cy="18" r="3.5" fill="#38bdf8"/>
+    <text x="26" y="22" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">ACTIVE SEAM</text>
+    <text x="14" y="41" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="10">REPEATABILITY: ±0.05mm</text>
+  </g>
+
+  <!-- Axis Identification Badges -->
+  <rect x="226" y="270" width="28" height="15" rx="3" fill="#081423" stroke="#efad2d" stroke-width="0.8"/>
+  <text x="240" y="281" fill="#ffd875" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="800" text-anchor="middle">J2</text>
+  <rect x="371" y="145" width="28" height="15" rx="3" fill="#081423" stroke="#efad2d" stroke-width="0.8"/>
+  <text x="385" y="156" fill="#ffd875" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="800" text-anchor="middle">J3</text>
+  <rect x="546" y="215" width="28" height="15" rx="3" fill="#081423" stroke="#efad2d" stroke-width="0.8"/>
+  <text x="560" y="226" fill="#ffd875" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="800" text-anchor="middle">J5</text>
+
+</svg>

@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Sri Balaji Gears Quality Assurance - Metrology lab, weld macro-etch testing, IQC/IPQC/PDI quality gates, and zero-defect automotive discipline in Hosur.">
+  <meta name="theme-color" content="#07111e">
+  <title>Quality Assurance &amp; Metrology | Sri Balaji Gears Hosur</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/sbg-mark.svg">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <div class="topline">
+    <div class="container">
+      <div class="topline-info">
+        <span class="topline-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          SIPCOT PHASE I, HOSUR, TAMIL NADU 635126
+        </span>
+        <span class="topline-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          MON – SAT: 8:30 AM – 6:00 PM IST
+        </span>
+      </div>
+      <div class="topline-info">
+        <a href="tel:+918778278761" class="topline-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +91 87782 78761
+        </a>
+        <a href="mailto:erp@sribalajigears.com" class="topline-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          erp@sribalajigears.com
+        </a>
+        <span class="topline-badge">RFQ RESPONSE &lt; 24H</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Sticky Header -->
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Sri Balaji Gears Home">
+        <img class="brand-emblem" src="assets/img/sbg-mark.svg" alt="SBG Monogram Logo" width="46" height="46">
+        <span class="brand-text-block">
+          <span class="brand-title">SRI BALAJI <span>GEARS</span></span>
+          <span class="brand-tagline">AUTOMOTIVE WELDING &amp; FABRICATION · HOSUR</span>
+        </span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="menu" aria-label="Main Navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="manufacturing.html">Manufacturing</a>
+        <a href="products.html">Products</a>
+        <a href="infrastructure.html">Infrastructure</a>
+        <a href="quality.html">Quality</a>
+        <a href="certifications.html">Certifications</a>
+        <a href="customers.html">Customers</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <a class="nav-button" href="contact.html">
+          REQUEST RFQ <span class="button-icon">↗</span>
+        </a>
+        <button class="hamb" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false">
+          <span class="hamb-line"></span>
+          <span class="hamb-line"></span>
+          <span class="hamb-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Off-Canvas Drawer -->
+  <div class="mobile-backdrop" id="mobileBackdrop"></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-label="Mobile Navigation">
+    <div class="drawer-header">
+      <a class="brand" href="index.html">
+        <img class="brand-emblem" src="assets/img/sbg-mark.svg" alt="SBG" width="38" height="38">
+        <span class="brand-text-block">
+          <span class="brand-title">SRI BALAJI <span>GEARS</span></span>
+        </span>
+      </a>
+      <button class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Company</a>
+      <a href="manufacturing.html">Manufacturing Capabilities</a>
+      <a href="products.html">Products &amp; Assemblies</a>
+      <a href="infrastructure.html">Plant Infrastructure</a>
+      <a href="quality.html">Quality &amp; Metrology</a>
+      <a href="certifications.html">Certifications</a>
+      <a href="customers.html">Customer Showcase</a>
+      <a href="contact.html">Contact &amp; RFQ</a>
+    </nav>
+    <div class="drawer-footer">
+      <div class="drawer-contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <a href="tel:+918778278761">+91 87782 78761</a>
+      </div>
+      <div class="drawer-contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:erp@sribalajigears.com">erp@sribalajigears.com</a>
+      </div>
+      <a class="button" href="contact.html" style="width: 100%; margin-top: 10px;">
+        REQUEST A QUOTE ↗
+      </a>
+    </div>
+  </aside>
+
+  <!-- Page Hero -->
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumbs">
+          <a href="index.html">Home</a>
+          <span class="separator">/</span>
+          <span>Quality</span>
+        </div>
+        <div class="eyebrow">Zero Defect Discipline &amp; Metrology</div>
+        <h1>
+          METALLURGICAL RIGOR IN<br>
+          <em>EVERY WELDED JOINT.</em>
+        </h1>
+        <p class="lead">
+          Our automotive quality assurance system is anchored in three rigorous gateways — Incoming Quality Control (IQC), In-Process Quality Control (IPQC), and Pre-Dispatch Inspection (PDI) — backed by dedicated weld macro-etch labs and coordinate verification.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3-Stage Quality Gateway Pipeline -->
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Quality Gateways</div>
+            <h2>THREE-TIER QUALITY ASSURANCE<br><em>STAGE-GATE PROCESS.</em></h2>
+          </div>
+          <p>
+            No material progresses to the next station without documented sign-off from calibrated inspection instruments and verified quality records.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card reveal delay-1">
+            <div class="pill-badge emerald" style="align-self: flex-start; margin-bottom: 14px;">
+              <span class="dot"></span> GATEWAY 01
+            </div>
+            <h3>Incoming Quality Control (IQC)</h3>
+            <p>
+              Verification of all raw steel tubes, coils, and plates upon delivery. Spectro chemical verification, tensile yield testing, and correlation against supplier mill test certificates.
+            </p>
+            <ul class="list-check" style="margin-top: 16px;">
+              <li>Chemical composition analysis</li>
+              <li>Wall thickness &amp; ovality check</li>
+              <li>Surface defect &amp; rust inspection</li>
+            </ul>
+          </article>
+
+          <article class="card reveal delay-2">
+            <div class="pill-badge" style="align-self: flex-start; margin-bottom: 14px;">
+              <span class="dot"></span> GATEWAY 02
+            </div>
+            <h3>In-Process Quality Control (IPQC)</h3>
+            <p>
+              First-off component signoff on every shift, continuous pneumatic jig clamping audits, weld throat thickness verification, and periodic destructive macro-etching.
+            </p>
+            <ul class="list-check" style="margin-top: 16px;">
+              <li>Weld bead penetration depth test</li>
+              <li>Shielding gas flow rate calibration</li>
+              <li>First-piece coordinate inspection</li>
+            </ul>
+          </article>
+
+          <article class="card reveal delay-3">
+            <div class="pill-badge cyan" style="align-self: flex-start; margin-bottom: 14px;">
+              <span class="dot"></span> GATEWAY 03
+            </div>
+            <h3>Pre-Dispatch Inspection (PDI)</h3>
+            <p>
+              100% verification on custom pneumatic Go/No-Go inspection fixtures to guarantee mounting hole center distances, followed by DFT coating tests and protective packing.
+            </p>
+            <ul class="list-check" style="margin-top: 16px;">
+              <li>100% Go/No-Go mounting fitment</li>
+              <li>Powder coat DFT test (&gt;60 microns)</li>
+              <li>Kanban barcode lot traceability</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrology Lab & Testing Capabilities -->
+    <section class="section alternate">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Lab Capabilities</div>
+            <h2>INSPECTION &amp; METROLOGY<br><em>TESTING INFRASTRUCTURE.</em></h2>
+          </div>
+          <p>
+            Our dedicated in-house metrology lab ensures full compliance with OEM weld penetration and structural load guidelines.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card reveal delay-1">
+            <div class="card-icon">🔬</div>
+            <h3>Weld Macro-Etch Testing</h3>
+            <p>
+              Cross-section cut, polish, and chemical acid etching under magnification to verify root penetration, throat depth, and absence of porosity or lack of fusion.
+            </p>
+            <div class="card-footer">
+              <span>AWS D1.1 / D1.3 Code</span>
+              <span class="text-gold">100% Fusion Depth</span>
+            </div>
+          </div>
+
+          <div class="card reveal delay-2">
+            <div class="card-icon">🔦</div>
+            <h3>Dye-Penetrant Testing (PT)</h3>
+            <p>
+              Fluorescent and liquid dye penetrant examination on high-stress frame corners and suspension bracket welds to detect micro-surface cracks.
+            </p>
+            <div class="card-footer">
+              <span>Non-Destructive Testing</span>
+              <span class="text-gold">Zero Crack Policy</span>
+            </div>
+          </div>
+
+          <div class="card reveal delay-3">
+            <div class="card-icon">📏</div>
+            <h3>Calibrated Metrology &amp; Jigs</h3>
+            <p>
+              Digital verniers, micrometers, height gauges, granite surface tables, and dedicated Go/No-Go checking fixtures built specifically to customer CAD models.
+            </p>
+            <div class="card-footer">
+              <span>ISO 9001 Calibrated</span>
+              <span class="text-gold">&lt; 0.02mm Precision</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quality Performance Targets Dashboard -->
+    <section class="section">
+      <div class="container">
+        <div class="section-heading centered">
+          <div>
+            <div class="eyebrow">Benchmark Performance</div>
+            <h2>OEM QUALITY SCORECARD<br><em>AND OPERATIONAL TARGETS.</em></h2>
+          </div>
+          <p>Maintaining world-class performance metrics to satisfy demanding Tier-1 automotive procurement auditors.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat reveal delay-1">
+            <strong>&lt; 50 PPM</strong>
+            <span>Customer PPM Defect Target</span>
+            <small>Rigorous stage-gate filtering</small>
+          </div>
+          <div class="stat reveal delay-2">
+            <strong>99.8%</strong>
+            <span>On-Time JIT Delivery</span>
+            <small>Daily line-side supply fulfillment</small>
+          </div>
+          <div class="stat reveal delay-3">
+            <strong>ZERO</strong>
+            <span>OEM Assembly Line Stoppages</span>
+            <small>Direct-on-Line (DOL) capability</small>
+          </div>
+          <div class="stat reveal delay-4">
+            <strong>100%</strong>
+            <span>Batch Heat Traceability</span>
+            <small>Barcoded ERP routing cards</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- High Impact Call to Action -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-copy">
+        <div class="pill-badge" style="background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.25); color: #ffffff; margin-bottom: 14px;">
+          <span class="dot" style="background: #ffffff; box-shadow: 0 0 8px #ffffff;"></span> QUALITY AUDIT
+        </div>
+        <h2>REQUEST OUR COMPLETE PPAP &amp; QUALITY DOSSIER.</h2>
+        <p>Our quality engineering team provides Level 3 PPAP packages, Control Plans, PFMEA, and weld test records for prospective OEM partners.</p>
+      </div>
+      <div class="actions">
+        <a class="button lg" href="contact.html">
+          REQUEST QUALITY MANUAL <span class="button-icon">↗</span>
+        </a>
+        <a class="button ghost lg" href="certifications.html">
+          VIEW CERTIFICATIONS
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enterprise Corporate Footer -->
+  <footer>
+    <div class="container">
+      <div class="footgrid">
+        <div class="footer-col">
+          <a class="brand" href="index.html" style="margin-bottom: 16px;">
+            <img class="brand-emblem" src="assets/img/sbg-mark.svg" alt="SBG" width="42" height="42">
+            <span class="brand-text-block">
+              <span class="brand-title">SRI BALAJI <span>GEARS</span></span>
+            </span>
+          </a>
+          <p>
+            Established in 1999 in SIPCOT Hosur. Specialized Tier-1 automotive manufacturer delivering bus seat frame assemblies (90% focus), automotive body chassis welding (50% focus), pressing, and precision fabrication.
+          </p>
+          <div class="footer-cert-tags">
+            <span class="pill-badge">IATF 16949 ALIGNED</span>
+            <span class="pill-badge">ISO 9001 ALIGNED</span>
+            <span class="pill-badge">EMS &amp; OHSMS</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>EXPLORE CAPABILITIES</h4>
+          <a href="about.html">About Sri Balaji Gears</a>
+          <a href="manufacturing.html">Manufacturing Capabilities</a>
+          <a href="products.html">Bus Seat &amp; Frame Products</a>
+          <a href="infrastructure.html">Plant &amp; Infrastructure</a>
+          <a href="quality.html">Quality Assurance &amp; Metrology</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>OEM PARTNERSHIPS</h4>
+          <a href="customers.html">Customer Showcase</a>
+          <a href="certifications.html">Standards &amp; Certifications</a>
+          <a href="customers.html">UNO Minda Seating Lines</a>
+          <a href="customers.html">TVS Motor Chassis Frames</a>
+          <a href="contact.html">Request For Quotation (RFQ)</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>PLANT LOCATION</h4>
+          <p>
+            <strong>Sri Balaji Gears</strong><br>
+            SIPCOT Industrial Complex, Phase I<br>
+            Hosur, Tamil Nadu 635126, India
+          </p>
+          <p style="margin-top: 10px;">
+            <strong>Phone:</strong> <a href="tel:+918778278761" style="display:inline; color:var(--gold-300);">+91 87782 78761</a><br>
+            <strong>Email:</strong> <a href="mailto:erp@sribalajigears.com" style="display:inline; color:var(--gold-300);">erp@sribalajigears.com</a><br>
+            <strong>Working Hours:</strong> Mon – Sat: 8:30 AM – 6:00 PM
+          </p>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <span>© <span data-year>2026</span> Sri Balaji Gears. All Rights Reserved. Developed by Damodharan M | Full Stack Developer.</span>
+        <span>SIPCOT Phase I, Hosur, Tamil Nadu · Automotive Manufacturing Corridor</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Actions (Scroll-to-top & RFQ FAB) -->
+  <div class="floating-actions">
+    <a href="contact.html" class="quick-rfq-fab" aria-label="Request Instant Quote">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="fab-text">REQUEST RFQ</span>
+    </a>
+    <button id="scrollTopBtn" class="btn-scroll-top" aria-label="Scroll to top of page">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+  </div>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
