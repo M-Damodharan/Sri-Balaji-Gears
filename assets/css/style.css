@@ -276,15 +276,9 @@ h1 em, h2 em, h3 em, .highlight-gold {
   50% { opacity: 0.4; transform: scale(0.8); }
 }
 
-/* --- Top Utility Bar --- */
+/* --- Top Utility Bar (Removed) --- */
 .topline {
-  background: #03070d;
-  border-bottom: 1px solid var(--border-subtle);
-  font-size: 0.77rem;
-  color: var(--ink-secondary);
-  padding: 7px 0;
-  position: relative;
-  z-index: 40;
+  display: none !important;
 }
 
 .topline .container {
