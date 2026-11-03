@@ -55,7 +55,9 @@
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   
-  --max-width: 1720px;
+  --container-max: 2560px;
+  --container-gutter: clamp(14px, 2.5vw, 44px);
+  --max-width: var(--container-max);
   --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-base: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -133,9 +135,10 @@ ul, ol {
   outline-offset: 3px;
 }
 
-/* --- Container Utility --- */
+/* --- Container Utility (Fluid Screen Auto-Fitting System) --- */
 .container {
-  width: min(var(--max-width), calc(100% - 2 * clamp(18px, 3vw, 56px)));
+  width: 100%;
+  max-width: min(var(--container-max), calc(100% - 2 * var(--container-gutter)));
   margin-inline: auto;
 }
 
@@ -348,7 +351,8 @@ h1 em, h2 em, h3 em, .highlight-gold {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: clamp(14px, 1.8vw, 32px);
+  width: 100%;
   transition: height var(--transition-base);
 }
 
@@ -409,18 +413,19 @@ h1 em, h2 em, h3 em, .highlight-gold {
 .menu {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: clamp(2px, 0.5vw, 10px);
 }
 
 .menu a {
-  padding: 8px 12px;
-  font-size: 0.82rem;
+  padding: 8px clamp(8px, 0.75vw, 15px);
+  font-size: clamp(0.8rem, 0.82vw, 0.92rem);
   font-weight: 600;
   letter-spacing: 0.03em;
   color: var(--ink-secondary);
   border-radius: var(--radius-xs);
   position: relative;
   transition: color var(--transition-fast), background-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .menu a:hover {
@@ -741,16 +746,18 @@ body.drawer-open {
 }
 
 .hero-copy {
-  max-width: 1080px;
+  max-width: min(1360px, 100%);
+  width: 100%;
 }
 
 .hero-copy h1 {
   margin: 18px 0;
-  max-width: 1140px;
+  max-width: min(1420px, 100%);
 }
 
 .hero-copy .lead {
   margin-bottom: 24px;
+  max-width: min(1180px, 100%);
 }
 
 /* Hero Quick Spec Pillars */
@@ -835,12 +842,21 @@ body.drawer-open {
 
 /* --- Page Heroes (Inner Pages) --- */
 .page-hero {
-  padding: clamp(60px, 8vw, 95px) 0 clamp(40px, 5vw, 60px);
+  padding: clamp(56px, 7vw, 92px) 0 clamp(36px, 4vw, 56px);
   background: 
     radial-gradient(ellipse at 85% 15%, rgba(28, 54, 88, 0.55) 0%, rgba(10, 20, 34, 0.85) 60%, var(--bg-dark) 100%);
   border-bottom: 1px solid var(--border-subtle);
   position: relative;
   overflow: hidden;
+  width: 100%;
+}
+
+.page-hero h1 {
+  max-width: min(1400px, 100%);
+}
+
+.page-hero .lead {
+  max-width: min(1180px, 100%);
 }
 
 .page-hero::after {
@@ -897,9 +913,10 @@ body.drawer-open {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 32px;
-  margin-bottom: clamp(32px, 5vw, 48px);
+  gap: clamp(20px, 3vw, 48px);
+  margin-bottom: clamp(32px, 4vw, 48px);
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .section-heading.centered {
@@ -912,36 +929,45 @@ body.drawer-open {
   margin-inline: auto;
 }
 
+.section-heading > div:first-child {
+  flex: 1 1 520px;
+}
+
 .section-heading p {
-  max-width: 640px;
+  flex: 1 1 360px;
+  max-width: min(840px, 100%);
   color: var(--ink-secondary);
-  font-size: clamp(1rem, 1.05vw, 1.12rem);
+  font-size: clamp(1rem, 1.05vw, 1.15rem);
   line-height: 1.6;
 }
 
-/* --- Grids --- */
+/* --- Grids (Auto-Adjusted Fluid Auto-Fitting System) --- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-  gap: 24px;
+  gap: clamp(18px, 2vw, 28px);
+  width: 100%;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+  width: 100%;
 }
 
 .grid-4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(16px, 1.8vw, 24px);
+  width: 100%;
 }
 
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  gap: clamp(20px, 2.5vw, 36px);
+  width: 100%;
 }
 
 /* Split Row */
@@ -1131,11 +1157,12 @@ body.drawer-open {
   border-radius: 50%;
 }
 
-/* Visual Card Grid (Welding / Process Showcase) */
+/* Visual Card Grid (Welding / Process Showcase - Auto-Fitted) */
 .visual-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  gap: clamp(20px, 2.5vw, 36px);
+  width: 100%;
 }
 
 .visual-card {
@@ -1207,11 +1234,12 @@ body.drawer-open {
   color: var(--ink-secondary);
 }
 
-/* --- Animated Stats Counter Grid --- */
+/* --- Animated Stats Counter Grid (Auto-Fitted) --- */
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(14px, 1.8vw, 24px);
+  width: 100%;
 }
 
 .stat {
@@ -1267,11 +1295,12 @@ body.drawer-open {
   margin-top: 4px;
 }
 
-/* --- Client / OEM Showcase Tiles --- */
+/* --- Client / OEM Showcase Tiles (Auto-Fitted) --- */
 .brand-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: clamp(18px, 2vw, 30px);
+  width: 100%;
 }
 
 .brand-tile {
@@ -1506,11 +1535,12 @@ body.drawer-open {
   line-height: 1.5;
 }
 
-/* --- Certifications Interactive Grid --- */
+/* --- Certifications Interactive Grid (Auto-Fitted) --- */
 .cert-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  gap: clamp(20px, 2.5vw, 36px);
+  width: 100%;
 }
 
 .cert-card {
@@ -1940,7 +1970,8 @@ body.drawer-open {
 }
 
 .cta-copy {
-  max-width: 860px;
+  flex: 1 1 540px;
+  max-width: min(960px, 100%);
 }
 
 .cta h2 {
@@ -2162,11 +2193,8 @@ footer {
    RESPONSIVE BREAKPOINTS (All Devices Fitted)
    ========================================================================== */
 
-/* --- Large Screens & Ultra-Wide Full Screen Coverage --- */
+/* --- Large Screens & Ultra-Wide Auto-Fitting Refinements --- */
 @media (min-width: 1440px) {
-  :root {
-    --max-width: 1680px;
-  }
   .menu {
     gap: 8px;
   }
@@ -2174,86 +2202,15 @@ footer {
     padding: 8px 14px;
     font-size: 0.86rem;
   }
-  .hero-copy {
-    max-width: 1120px;
-  }
-  .hero-copy h1 {
-    max-width: 1180px;
-  }
-  .lead {
-    max-width: 92ch;
-  }
-  .section-heading p {
-    max-width: 680px;
-  }
-}
-
-@media (min-width: 1680px) {
-  :root {
-    --max-width: 1820px;
-  }
-  .hero-copy {
-    max-width: 1220px;
-  }
-  .hero-copy h1 {
-    max-width: 1260px;
-  }
-  .lead {
-    max-width: 98ch;
-  }
-  .section-heading p {
-    max-width: 740px;
-  }
 }
 
 @media (min-width: 1920px) {
-  :root {
-    --max-width: 1960px;
-  }
-  .container {
-    width: min(var(--max-width), calc(100% - 2 * clamp(24px, 3vw, 64px)));
-  }
-  .hero-copy {
-    max-width: 1320px;
-  }
-  .hero-copy h1 {
-    max-width: 1360px;
-  }
-  .lead {
-    max-width: 104ch;
-  }
-  .section-heading p {
-    max-width: 800px;
-    font-size: 1.12rem;
-  }
   .menu {
     gap: 10px;
   }
   .menu a {
     padding: 9px 16px;
     font-size: 0.9rem;
-  }
-}
-
-@media (min-width: 2560px) {
-  :root {
-    --max-width: 2320px;
-  }
-  .container {
-    width: min(var(--max-width), calc(100% - 2 * clamp(32px, 3.5vw, 80px)));
-  }
-  .hero-copy {
-    max-width: 1500px;
-  }
-  .hero-copy h1 {
-    max-width: 1540px;
-  }
-  .lead {
-    max-width: 112ch;
-  }
-  .section-heading p {
-    max-width: 920px;
-    font-size: 1.2rem;
   }
 }
 
