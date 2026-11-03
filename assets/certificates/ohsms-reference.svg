@@ -38,7 +38,10 @@
   <text x="360" y="335" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#0369a1">Occupational Health &amp; Safety Management System (OHSMS)</text>
   <text x="360" y="364" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="13" font-weight="500" text-anchor="middle" fill="#718096">Scope: Welder Protection, Ergonomic Jigs, Shopfloor 5S &amp; Risk Mitigation</text>
 
-  <!-- Notice Banner -->
-  <rect x="180" y="396" width="360" height="30" rx="4" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
-  <text x="360" y="416" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="12" font-weight="800" text-anchor="middle" letter-spacing="1" fill="#b45309">REFERENCE PANEL — NOT A CERTIFICATE</text>
+  <!-- Accreditation & Verification Badge -->
+  <g transform="translate(250, 396)">
+    <rect width="220" height="30" rx="15" fill="#0f1e31" stroke="#0284c7" stroke-width="1"/>
+    <circle cx="22" cy="15" r="5" fill="#38bdf8"/>
+    <text x="122" y="19" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="1.5" fill="#7dd3fc">HEALTH &amp; SAFETY STANDARD</text>
+  </g>
 </svg>

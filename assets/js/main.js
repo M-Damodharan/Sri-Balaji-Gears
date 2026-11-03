@@ -309,7 +309,7 @@
       const img = card.querySelector('img')?.src || '';
       const title = card.querySelector('h3')?.textContent || '';
       const desc = card.querySelector('p')?.textContent || '';
-      const tag = card.getAttribute('data-tag') || 'Reference Artwork';
+      const tag = card.getAttribute('data-tag') || 'Certified Compliance Standard';
       openModal(img, title, desc, tag);
     });
   });
