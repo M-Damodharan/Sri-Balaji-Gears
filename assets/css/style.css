@@ -1333,25 +1333,25 @@ body.drawer-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 8px 18px;
+  min-height: 52px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
   transition: all var(--transition-base);
 }
 
 .brand-tile:hover .brand-logo-wrap {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(239, 173, 45, 0.35);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(239, 173, 45, 0.3);
+  border-color: var(--gold-400);
 }
 
 .brand-logo-img {
-  max-height: 34px;
+  max-height: 40px;
   width: auto;
-  max-width: 140px;
+  max-width: 155px;
   object-fit: contain;
   display: block;
 }
