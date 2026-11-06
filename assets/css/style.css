@@ -1333,12 +1333,15 @@ body.drawer-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 18px;
-  min-height: 52px;
+  width: 160px;
+  height: 54px;
+  padding: 6px 14px;
   background: #ffffff;
   border: 1px solid #ffffff;
   border-radius: var(--radius-sm);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  flex-shrink: 0;
   transition: all var(--transition-base);
 }
 
@@ -1349,9 +1352,10 @@ body.drawer-open {
 }
 
 .brand-logo-img {
+  width: 100%;
+  height: 100%;
+  max-width: 138px;
   max-height: 40px;
-  width: auto;
-  max-width: 155px;
   object-fit: contain;
   display: block;
 }
