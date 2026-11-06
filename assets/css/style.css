@@ -1316,6 +1316,46 @@ body.drawer-open {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(239, 173, 45, 0.15);
 }
 
+.brand-tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.brand-tile-header .brand-badge {
+  margin-bottom: 0;
+}
+
+.brand-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+}
+
+.brand-tile:hover .brand-logo-wrap {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(239, 173, 45, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.brand-logo-img {
+  max-height: 34px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
+}
+
 .brand-badge {
   display: inline-flex;
   align-items: center;
