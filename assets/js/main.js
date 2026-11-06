@@ -79,7 +79,8 @@
   const header = document.querySelector('.header');
   const scrollTopBtn = document.getElementById('scrollTopBtn');
 
-  function handleScroll() {
+  let isScrolling = false;
+  function updateScrollState() {
     const y = window.scrollY || window.pageYOffset;
     if (header) {
       if (y > 35) {
@@ -96,10 +97,18 @@
         scrollTopBtn.classList.remove('show');
       }
     }
+    isScrolling = false;
+  }
+
+  function handleScroll() {
+    if (!isScrolling) {
+      window.requestAnimationFrame(updateScrollState);
+      isScrolling = true;
+    }
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
+  updateScrollState();
 
   if (scrollTopBtn) {
     scrollTopBtn.addEventListener('click', () => {
