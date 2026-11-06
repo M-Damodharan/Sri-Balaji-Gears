@@ -32,7 +32,7 @@ A corporate website for **Sri Balaji Gears** (Hosur, Tamil Nadu), engineered for
    - **Infrastructure (`infrastructure.html`)**: 70,000 sq. ft. campus dashboard, 6 specialized industrial bays (press, bending, robotic, manual, tool room, lab), SIPCOT Hosur highway logistics.
    - **Quality (`quality.html`)**: 3-stage gateway (IQC, IPQC, PDI), weld macro-etch lab, dye penetrant crack testing, and quality scorecard (<50 PPM target).
    - **Certifications (`certifications.html`)**: Interactive gallery with click-to-zoom modal for IATF 16949, ISO 9001, EMS, and OHSMS, plus audit scope matrix.
-   - **Customers (`customers.html`)**: In-depth profiles for UNO MINDA (~90% bus seat focus), TVS Motor Company (~50% auto chassis focus), and Ashok Leyland showcase, with supplier rating metrics.
+   - **Customers (`customers.html`)**: In-depth profiles for UNO MINDA (strategic bus seating partner) and TVS Motor Company (automotive chassis frame partner), with supplier rating metrics.
    - **Contact (`contact.html`)**: Interactive RFQ portal form with requirement selector, volume estimation, formatted mailto generation, plant directory, copy buttons, and transit directions from Bengaluru.
 
 ---
@@ -50,7 +50,6 @@ A corporate website for **Sri Balaji Gears** (Hosur, Tamil Nadu), engineered for
 - **Core OEM Partners**:
   - **UNO MINDA**: Dedicated bus seat frame welding (~90% specialized work focus)
   - **TVS Motor Company**: Auto body frame welding parts (~50% automotive focus)
-  - **Ashok Leyland**: Listed in corporate profile customer showcase
 
 ---
 
