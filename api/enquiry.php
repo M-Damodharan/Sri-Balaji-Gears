@@ -202,25 +202,21 @@ try {
     ]);
 
     // 6. Send Emails
-    $destEmail = config('ERP_EMAIL', 'prabhu@sribalajigears.com');
     $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.in'), '/');
     $attachmentAbsPath = $hasAttachment ? dirname(__DIR__) . '/' . $attachmentPath : null;
 
-    // Send Notification Email to Prabhu / ERP desk
+    // Send Notification Email to Prabhu & ERP desk simultaneously in one high-speed connection
+    $plantRecipients = array_values(array_unique([
+        config('ERP_EMAIL', 'prabhu@sribalajigears.com'),
+        'prabhu@sribalajigears.com',
+        'erp@sribalajigears.com'
+    ]));
+
     sendErpNotificationEmail(
-        $destEmail, $refId, $name, $company, $email, $phone,
+        $plantRecipients, $refId, $name, $company, $email, $phone,
         $projectType, $otherCategory, $quantity, $message,
         $attachmentName, $attachmentAbsPath, $appUrl
     );
-
-    // If configured email is not erp@sribalajigears.com, also copy erp@sribalajigears.com
-    if ($destEmail !== 'erp@sribalajigears.com') {
-        sendErpNotificationEmail(
-            'erp@sribalajigears.com', $refId, $name, $company, $email, $phone,
-            $projectType, $otherCategory, $quantity, $message,
-            $attachmentName, $attachmentAbsPath, $appUrl
-        );
-    }
 
     // Send Customer "Thank You" Confirmation Email with Tracking Reference ID & Details
     sendCustomerConfirmationEmail(
@@ -580,10 +576,13 @@ function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $r
     $fromEmail = config('SMTP_FROM_EMAIL', config('SMTP_FROM', config('ERP_EMAIL', 'erp@sribalajigears.com')));
     $fromName = config('SMTP_FROM_NAME', 'Sri Balaji Gears');
 
-    $boundary = '==Multipart_Boundary_x' . md5(time()) . 'x';
+    $boundary = '==Multipart_Boundary_x' . md5(microtime(true) . rand()) . 'x';
+    $toHeader = is_array($to) ? implode(', ', $to) : $to;
 
     // Headers
     $headers = [];
+    $headers[] = 'Date: ' . date('r');
+    $headers[] = 'Message-ID: <' . time() . '.' . bin2hex(random_bytes(8)) . '@sribalajigears.in>';
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = "From: {$fromName} <{$fromEmail}>";
     if ($replyToEmail) {
@@ -592,33 +591,34 @@ function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $r
     $headers[] = 'X-Mailer: SBG-Mailer/1.0';
     $headers[] = "Content-Type: multipart/mixed; boundary=\"{$boundary}\"";
 
-    // Body
+    // Body with base64 encoded HTML for 100% UTF-8 / emoji safety across all mail clients
     $body = "--{$boundary}\r\n";
     $body .= "Content-Type: text/html; charset=UTF-8\r\n";
-    $body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $body .= $htmlContent . "\r\n";
+    $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
+    $body .= chunk_split(base64_encode($htmlContent)) . "\r\n";
 
     // Attachment
-    if ($attName && $attPath && file_exists($attPath) && filesize($attPath) < 10 * 1024 * 1024) {
+    if ($attName && $attPath && file_exists($attPath) && filesize($attPath) < 15 * 1024 * 1024) {
         $fileData = file_get_contents($attPath);
         $fileChunk = chunk_split(base64_encode($fileData));
+        $cleanAttName = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', basename($attName));
         $body .= "--{$boundary}\r\n";
-        $body .= "Content-Type: application/octet-stream; name=\"" . basename($attName) . "\"\r\n";
-        $body .= "Content-Description: " . basename($attName) . "\r\n";
-        $body .= "Content-Disposition: attachment; filename=\"" . basename($attName) . "\"; size=" . strlen($fileData) . ";\r\n";
+        $body .= "Content-Type: application/octet-stream; name=\"{$cleanAttName}\"\r\n";
+        $body .= "Content-Description: {$cleanAttName}\r\n";
+        $body .= "Content-Disposition: attachment; filename=\"{$cleanAttName}\"; size=" . strlen($fileData) . ";\r\n";
         $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
         $body .= $fileChunk . "\r\n";
     }
 
     $body .= "--{$boundary}--";
 
-    // 1. If SMTP is configured, attempt direct socket SMTP transmission
-    $smtpHost = config('SMTP_HOST');
-    $smtpEnabled = config('SMTP_ENABLED');
-    if (($smtpEnabled === 'true' || $smtpEnabled === '1' || !empty($smtpHost)) && !empty($smtpHost)) {
+    // 1. Direct socket SMTP transmission
+    $smtpHost = config('SMTP_HOST', 'smtp.rediffmailpro.com');
+    $smtpEnabled = config('SMTP_ENABLED', 'true');
+    if ($smtpEnabled === 'true' || $smtpEnabled === '1' || !empty($smtpHost)) {
         $port = (int)config('SMTP_PORT', 465);
-        $user = config('SMTP_USER', config('SMTP_USERNAME', ''));
-        $pass = config('SMTP_PASS', config('SMTP_PASSWORD', ''));
+        $user = config('SMTP_USER', config('SMTP_USERNAME', 'erp@sribalajigears.com'));
+        $pass = config('SMTP_PASS', config('SMTP_PASSWORD', 'sbgerp@2026'));
         $crypto = strtolower(config('SMTP_ENCRYPTION', config('SMTP_SECURE', ($port == 465 ? 'ssl' : 'tls'))));
 
         $smtpSuccess = sendViaSmtpSocket($to, $subject, $body, $headers, $smtpHost, $port, $user, $pass, $crypto);
@@ -628,15 +628,16 @@ function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $r
         error_log("Native SMTP delivery failed. Falling back to PHP mail().");
     }
 
-    // 2. Standard server mail() dispatch
-    return @mail($to, $subject, $body, implode("\r\n", $headers));
+    // 2. Standard server mail() fallback
+    return @mail($toHeader, $subject, $body, implode("\r\n", $headers));
 }
 
 /**
  * Lightweight, zero-dependency SMTP client via standard PHP sockets
+ * Supports multiple simultaneous recipients, full stream buffering, and robust error checking
  */
 function sendViaSmtpSocket($to, $subject, $body, $headers, $host, $port, $user, $pass, $crypto = 'tls') {
-    $timeout = 10;
+    $timeout = 15;
     $context = stream_context_create([
         'ssl' => [
             'verify_peer' => false,
@@ -652,6 +653,8 @@ function sendViaSmtpSocket($to, $subject, $body, $headers, $host, $port, $user, 
         return false;
     }
 
+    stream_set_timeout($socket, $timeout);
+
     $read = function() use ($socket) {
         $data = '';
         while ($str = fgets($socket, 515)) {
@@ -661,54 +664,84 @@ function sendViaSmtpSocket($to, $subject, $body, $headers, $host, $port, $user, 
         return $data;
     };
 
-    $write = function($cmd) use ($socket) {
+    $writeLine = function($cmd) use ($socket) {
         fputs($socket, $cmd . "\r\n");
     };
 
+    $writeAll = function($data) use ($socket) {
+        $length = strlen($data);
+        $written = 0;
+        while ($written < $length) {
+            $chunk = fwrite($socket, substr($data, $written, 8192));
+            if ($chunk === false || $chunk === 0) {
+                return false;
+            }
+            $written += $chunk;
+        }
+        return true;
+    };
+
     $read(); // Initial service banner
-    $write("EHLO " . (gethostname() ?: 'sribalajigears.com'));
+    $writeLine("EHLO " . (gethostname() ?: 'sribalajigears.com'));
     $read();
 
     if ($crypto === 'tls' && $port != 465) {
-        $write("STARTTLS");
+        $writeLine("STARTTLS");
         $res = $read();
         if (strpos($res, '220') === 0) {
             stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-            $write("EHLO " . (gethostname() ?: 'sribalajigears.com'));
+            $writeLine("EHLO " . (gethostname() ?: 'sribalajigears.com'));
             $read();
         }
     }
 
     if (!empty($user) && !empty($pass)) {
-        $write("AUTH LOGIN");
+        $writeLine("AUTH LOGIN");
         $read();
-        $write(base64_encode($user));
+        $writeLine(base64_encode($user));
         $read();
-        $write(base64_encode($pass));
+        $writeLine(base64_encode($pass));
         $res = $read();
         if (strpos($res, '235') !== 0) {
             error_log("SMTP AUTH rejected for user: {$user}");
-            $write("QUIT");
+            $writeLine("QUIT");
             fclose($socket);
             return false;
         }
     }
 
     $fromMail = config('SMTP_FROM_EMAIL', config('ERP_EMAIL', 'erp@sribalajigears.com'));
-    $write("MAIL FROM: <{$fromMail}>");
+    $writeLine("MAIL FROM: <{$fromMail}>");
     $read();
 
-    $write("RCPT TO: <{$to}>");
+    $recipients = is_array($to) ? $to : array_map('trim', explode(',', $to));
+    $acceptedCount = 0;
+    foreach ($recipients as $rcpt) {
+        if (!empty($rcpt)) {
+            $writeLine("RCPT TO: <{$rcpt}>");
+            $rcptRes = $read();
+            if (strpos($rcptRes, '250') === 0 || strpos($rcptRes, '251') === 0) {
+                $acceptedCount++;
+            }
+        }
+    }
+
+    if ($acceptedCount === 0) {
+        error_log("SMTP recipient(s) rejected for: " . json_encode($to));
+        $writeLine("QUIT");
+        fclose($socket);
+        return false;
+    }
+
+    $writeLine("DATA");
     $read();
 
-    $write("DATA");
-    $read();
-
-    $payload = implode("\r\n", $headers) . "\r\nSubject: {$subject}\r\nTo: <{$to}>\r\n\r\n" . $body . "\r\n.\r\n";
-    fputs($socket, $payload);
+    $toHeader = implode(', ', array_filter($recipients));
+    $payload = implode("\r\n", $headers) . "\r\nSubject: {$subject}\r\nTo: {$toHeader}\r\n\r\n" . $body . "\r\n.\r\n";
+    $writeAll($payload);
     $res = $read();
 
-    $write("QUIT");
+    $writeLine("QUIT");
     $read();
     fclose($socket);
 
