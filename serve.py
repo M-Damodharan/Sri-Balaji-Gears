@@ -304,14 +304,16 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         cust_msg = MIMEMultipart("alternative")
         cust_msg["From"] = f"{from_name} <{from_email}>"
         cust_msg["To"] = email
-        cust_msg["Subject"] = f"RFQ Confirmation [{ref_id}] - Sri Balaji Gears"
+        cust_msg["Subject"] = f"Thank You for Your RFQ [{ref_id}] - Sri Balaji Gears Hosur"
+
+        att_confirm = f"<strong style='color:#059669;'>✓ {att_name}</strong> (Received &amp; Logged)" if att_name else "<span style='color:#94a3b8;'>No attachment submitted</span>"
 
         cust_html = f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RFQ Confirmation [{ref_id}] - Sri Balaji Gears</title>
+  <title>Thank You for Your RFQ [{ref_id}] - Sri Balaji Gears</title>
 </head>
 <body style="margin:0; padding:0; background-color:#0b1320; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#1e293b; -webkit-font-smoothing:antialiased;">
   <center style="width:100%; background-color:#0b1320; padding:24px 0;">
@@ -337,8 +339,30 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
               </td>
               <td align="right" valign="middle">
                 <span style="display:inline-block; padding:6px 12px; background:rgba(16, 185, 129, 0.15); border:1px solid #10b981; border-radius:20px; color:#34d399; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;">
-                  ✓ INQUIRY RECEIVED
+                  ✓ RFQ RECEIVED &amp; LOGGED
                 </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Subheader with Reference ID & Tracking Status -->
+      <tr>
+        <td style="background-color:#f8fafc; padding:16px 28px; border-bottom:1px solid #e2e8f0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td>
+                <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Tracking Reference ID</div>
+                <div style="font-size:17px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:3px;">
+                  <span style="background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:4px; border:1px solid #fde68a;">{ref_id}</span>
+                </div>
+              </td>
+              <td align="right">
+                <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Current Status</div>
+                <div style="font-size:12px; font-weight:700; color:#059669; margin-top:3px;">
+                  ● Under Engineering Appraisal
+                </div>
               </td>
             </tr>
           </table>
@@ -347,24 +371,31 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
 
       <!-- Body Content -->
       <tr>
-        <td style="padding:28px 28px; font-size:14px; line-height:1.6;">
+        <td style="padding:26px 28px; font-size:14px; line-height:1.6;">
           
           <p style="margin-top:0;">Dear <strong>{name}</strong>,</p>
-          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong> through the official Sri Balaji Gears engineering portal.</p>
-          <p>Our production planning and tool engineering team in SIPCOT Hosur has received your technical specifications:</p>
-
-          <!-- Reference ID Box -->
-          <div style="background-color:#f8fafc; border:1px dashed #cbd5e1; border-radius:6px; padding:14px 18px; margin:18px 0; text-align:center;">
-            <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Official Tracking Reference ID</div>
-            <div style="font-size:18px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:4px;">
-              <span style="background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:4px; border:1px solid #fde68a;">{ref_id}</span>
-            </div>
-          </div>
+          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong>. Your technical parameters and component requirements have been logged into our Hosur plant ERP system.</p>
 
           <!-- Parameter Summary Table -->
-          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse; margin-bottom:20px; font-size:13px; border:1px solid #e2e8f0; border-radius:6px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse; margin:18px 0; font-size:13px; border:1px solid #e2e8f0; border-radius:6px;">
             <tr style="background-color:#f8fafc;">
-              <td style="padding:10px 14px; width:38%; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">🎯 Requirement Category</td>
+              <td style="padding:10px 14px; width:36%; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">👤 Contact Person</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{name}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">🏢 Company / OEM</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{company}</td>
+            </tr>
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">📞 Contact Phone / Mobile</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{phone}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">✉️ Registered Email</td>
+              <td style="padding:10px 14px; font-weight:600; color:#2563eb; border-bottom:1px solid #e2e8f0;">{email}</td>
+            </tr>
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">🎯 Requirement Category</td>
               <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{cat_display}</td>
             </tr>
             <tr>
@@ -372,16 +403,25 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
               <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{quantity}</td>
             </tr>
             <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">📎 Attached Technical Drawing</td>
+              <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0;">{att_confirm}</td>
+            </tr>
+            <tr>
               <td style="padding:10px 14px; font-weight:600; color:#475569;">⚡ Target Turnaround SLA</td>
               <td style="padding:10px 14px; font-weight:700; color:#d97706;">Technical review &amp; quote within 24–48 hours</td>
             </tr>
           </table>
 
-          <p>An application engineer has been assigned to inspect your component parameters and CAD drawings. We will reach out directly to <strong>{email}</strong> or <strong>{phone}</strong> with our technical appraisal and commercial estimate.</p>
+          <div style="font-size:12px; font-weight:700; color:#07111e; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">
+            📝 Your Technical Notes:
+          </div>
+          <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #efad2d; border-radius:6px; padding:12px 14px; font-size:13px; color:#1e293b; line-height:1.6; margin-bottom:18px;">{message}</div>
+
+          <p>A Senior Tooling &amp; Welding Engineer has been assigned to inspect your component parameters. We will contact you at <strong>{phone}</strong> or <strong>{email}</strong> with our formal techno-commercial proposal.</p>
 
           <p style="margin-top:24px; margin-bottom:0;">Warm regards,<br>
             <strong>Technical Sales &amp; ERP Engineering Team</strong><br>
-            <span style="color:#64748b; font-size:13px;">Sri Balaji Gears · SIPCOT Hosur</span>
+            <span style="color:#64748b; font-size:13px;">Sri Balaji Gears · SIPCOT Industrial Complex, Hosur</span>
           </p>
 
         </td>
@@ -393,8 +433,8 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
           <div style="font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;">SRI BALAJI GEARS</div>
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style="margin-top:4px;">
-            <strong>Hotline:</strong> <a href="tel:+917373334411" style="color:#efad2d; text-decoration:none;">+91 73733 34411</a> &middot; 
-            <strong>Email:</strong> <a href="mailto:erp@sribalajigears.com" style="color:#efad2d; text-decoration:none;">erp@sribalajigears.com</a>
+            <strong>Direct Plant Line:</strong> <a href="tel:+917373334411" style="color:#efad2d; text-decoration:none;">+91 73733 34411</a> &middot; 
+            <strong>Email:</strong> <a href="mailto:prabhu@sribalajigears.com" style="color:#efad2d; text-decoration:none;">prabhu@sribalajigears.com</a>
           </div>
         </td>
       </tr>

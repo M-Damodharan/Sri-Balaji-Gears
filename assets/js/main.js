@@ -474,7 +474,7 @@
           if (btnIcon) btnIcon.textContent = origIcon;
         }
 
-        const drawingFile = formData.get('drawing');
+        const drawingFile = formData.get('attachment') || formData.get('drawing');
         const fileInfo = (drawingFile && drawingFile.name && drawingFile.size > 0)
           ? `Attached Drawing: ${drawingFile.name} (${(drawingFile.size / 1024).toFixed(1)} KB)`
           : 'Attached Drawing: None';

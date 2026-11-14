@@ -64,15 +64,15 @@ try {
         }
     }
 
-    // 3. Extract and Sanitize Inputs
-    $name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
-    $company = trim(filter_input(INPUT_POST, 'company', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
-    $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '');
-    $phone = trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
-    $projectType = trim(filter_input(INPUT_POST, 'projectType', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
-    $otherCategory = trim(filter_input(INPUT_POST, 'otherCategory', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
-    $quantity = trim(filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_SPECIAL_CHARS) ?? 'Not specified');
-    $message = trim(filter_input(INPUT_POST, 'message', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+    // 3. Extract and Sanitize Inputs (direct $_POST with fallback to filter_input)
+    $name = trim($_POST['name'] ?? filter_input(INPUT_POST, 'name') ?? '');
+    $company = trim($_POST['company'] ?? filter_input(INPUT_POST, 'company') ?? '');
+    $email = trim($_POST['email'] ?? filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '');
+    $phone = trim($_POST['phone'] ?? filter_input(INPUT_POST, 'phone') ?? '');
+    $projectType = trim($_POST['projectType'] ?? filter_input(INPUT_POST, 'projectType') ?? '');
+    $otherCategory = trim($_POST['otherCategory'] ?? filter_input(INPUT_POST, 'otherCategory') ?? '');
+    $quantity = trim($_POST['quantity'] ?? filter_input(INPUT_POST, 'quantity') ?? 'Not specified');
+    $message = trim($_POST['message'] ?? filter_input(INPUT_POST, 'message') ?? '');
     $userAgent = substr($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown', 0, 255);
 
     // Validation
@@ -111,8 +111,15 @@ try {
     $attachmentSize = 0;
     $hasAttachment = false;
 
+    $uploadedFile = null;
     if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $file = $_FILES['attachment'];
+        $uploadedFile = $_FILES['attachment'];
+    } elseif (isset($_FILES['drawing']) && $_FILES['drawing']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $uploadedFile = $_FILES['drawing'];
+    }
+
+    if ($uploadedFile) {
+        $file = $uploadedFile;
 
         if ($file['error'] !== UPLOAD_ERR_OK) {
             http_response_code(400);
@@ -215,10 +222,11 @@ try {
         );
     }
 
-    // Send Customer Acknowledgment Email
+    // Send Customer "Thank You" Confirmation Email with Tracking Reference ID & Details
     sendCustomerConfirmationEmail(
-        $email, $name, $company, $refId,
-        $projectType, $otherCategory, $quantity, $message
+        $email, $name, $company, $phone, $refId,
+        $projectType, $otherCategory, $quantity, $message,
+        $attachmentName
     );
 
     // Return Success
@@ -416,9 +424,13 @@ function sendErpNotificationEmail($to, $refId, $name, $company, $email, $phone, 
 /**
  * Dispatch confirmation email to customer
  */
-function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, $customCategory, $volume, $message) {
+function sendCustomerConfirmationEmail($to, $name, $company, $phone, $refId, $category, $customCategory, $volume, $message, $attName = null) {
     $categoryDisplay = $category === 'Others' ? "Others ({$customCategory})" : $category;
-    $subject = "RFQ Confirmation [{$refId}] - Sri Balaji Gears Hosur";
+    $subject = "Thank You for Your RFQ [{$refId}] - Sri Balaji Gears Hosur";
+
+    $attDisplay = $attName 
+        ? "<strong style='color:#059669;'>✓ " . htmlspecialchars($attName) . "</strong> (Received &amp; Logged)"
+        : "<span style='color:#94a3b8;'>No attachment submitted</span>";
 
     $htmlBody = "
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
@@ -426,7 +438,7 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
   <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
-  <title>RFQ Confirmation [{$refId}] - Sri Balaji Gears</title>
+  <title>Thank You for Your RFQ [{$refId}] - Sri Balaji Gears</title>
 </head>
 <body style='margin:0; padding:0; background-color:#0b1320; font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif; color:#1e293b; -webkit-font-smoothing:antialiased;'>
   <center style='width:100%; background-color:#0b1320; padding:24px 0;'>
@@ -452,8 +464,30 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
               </td>
               <td align='right' valign='middle'>
                 <span style='display:inline-block; padding:6px 12px; background:rgba(16, 185, 129, 0.15); border:1px solid #10b981; border-radius:20px; color:#34d399; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;'>
-                  ✓ INQUIRY RECEIVED
+                  ✓ RFQ RECEIVED &amp; LOGGED
                 </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Subheader with Reference ID & Tracking Status -->
+      <tr>
+        <td style='background-color:#f8fafc; padding:16px 28px; border-bottom:1px solid #e2e8f0;'>
+          <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+            <tr>
+              <td>
+                <div style='font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;'>Tracking Reference ID</div>
+                <div style='font-size:17px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:3px;'>
+                  <span style='background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:4px; border:1px solid #fde68a;'>{$refId}</span>
+                </div>
+              </td>
+              <td align='right'>
+                <div style='font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;'>Current Status</div>
+                <div style='font-size:12px; font-weight:700; color:#059669; margin-top:3px;'>
+                  ● Under Engineering Appraisal
+                </div>
               </td>
             </tr>
           </table>
@@ -462,24 +496,31 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
 
       <!-- Body Content -->
       <tr>
-        <td style='padding:28px 28px; font-size:14px; line-height:1.6;'>
+        <td style='padding:26px 28px; font-size:14px; line-height:1.6;'>
           
           <p style='margin-top:0;'>Dear <strong>" . htmlspecialchars($name) . "</strong>,</p>
-          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>" . htmlspecialchars($company) . "</strong> through the official Sri Balaji Gears engineering portal.</p>
-          <p>Our production planning and tool engineering team in SIPCOT Hosur has received your technical specifications:</p>
-
-          <!-- Reference ID Box -->
-          <div style='background-color:#f8fafc; border:1px dashed #cbd5e1; border-radius:6px; padding:14px 18px; margin:18px 0; text-align:center;'>
-            <div style='font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;'>Official Tracking Reference ID</div>
-            <div style='font-size:18px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:4px;'>
-              <span style='background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:4px; border:1px solid #fde68a;'>{$refId}</span>
-            </div>
-          </div>
+          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>" . htmlspecialchars($company) . "</strong>. Your technical parameters and component requirements have been logged into our Hosur plant ERP system.</p>
 
           <!-- Parameter Summary Table -->
-          <table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse; margin-bottom:20px; font-size:13px; border:1px solid #e2e8f0; border-radius:6px;'>
+          <table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse; margin:18px 0; font-size:13px; border:1px solid #e2e8f0; border-radius:6px;'>
             <tr style='background-color:#f8fafc;'>
-              <td style='padding:10px 14px; width:38%; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>🎯 Requirement Category</td>
+              <td style='padding:10px 14px; width:36%; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>👤 Contact Person</td>
+              <td style='padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;'>" . htmlspecialchars($name) . "</td>
+            </tr>
+            <tr>
+              <td style='padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>🏢 Company / OEM</td>
+              <td style='padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;'>" . htmlspecialchars($company) . "</td>
+            </tr>
+            <tr style='background-color:#f8fafc;'>
+              <td style='padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>📞 Contact Phone / Mobile</td>
+              <td style='padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;'>" . htmlspecialchars($phone) . "</td>
+            </tr>
+            <tr>
+              <td style='padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>✉️ Registered Email</td>
+              <td style='padding:10px 14px; font-weight:600; color:#2563eb; border-bottom:1px solid #e2e8f0;'>" . htmlspecialchars($to) . "</td>
+            </tr>
+            <tr style='background-color:#f8fafc;'>
+              <td style='padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>🎯 Requirement Category</td>
               <td style='padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;'>{$categoryDisplay}</td>
             </tr>
             <tr>
@@ -487,16 +528,25 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
               <td style='padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;'>{$volume}</td>
             </tr>
             <tr style='background-color:#f8fafc;'>
+              <td style='padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;'>📎 Attached Technical Drawing</td>
+              <td style='padding:10px 14px; border-bottom:1px solid #e2e8f0;'>{$attDisplay}</td>
+            </tr>
+            <tr>
               <td style='padding:10px 14px; font-weight:600; color:#475569;'>⚡ Target Turnaround SLA</td>
               <td style='padding:10px 14px; font-weight:700; color:#d97706;'>Technical review &amp; quote within 24–48 hours</td>
             </tr>
           </table>
 
-          <p>An application engineer has been assigned to inspect your component parameters and CAD drawings. We will reach out directly to <strong>{$email}</strong> or <strong>{$phone}</strong> with our technical appraisal and commercial estimate.</p>
+          <div style='font-size:12px; font-weight:700; color:#07111e; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;'>
+            📝 Your Technical Notes:
+          </div>
+          <div style='background-color:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #efad2d; border-radius:6px; padding:12px 14px; font-size:13px; color:#1e293b; line-height:1.6; margin-bottom:18px;'>" . nl2br(htmlspecialchars($message)) . "</div>
+
+          <p>A Senior Tooling &amp; Welding Engineer has been assigned to inspect your component parameters. We will contact you at <strong>" . htmlspecialchars($phone) . "</strong> or <strong>" . htmlspecialchars($to) . "</strong> with our formal techno-commercial proposal.</p>
 
           <p style='margin-top:24px; margin-bottom:0;'>Warm regards,<br>
             <strong>Technical Sales &amp; ERP Engineering Team</strong><br>
-            <span style='color:#64748b; font-size:13px;'>Sri Balaji Gears · SIPCOT Hosur</span>
+            <span style='color:#64748b; font-size:13px;'>Sri Balaji Gears · SIPCOT Industrial Complex, Hosur</span>
           </p>
 
         </td>
@@ -508,8 +558,8 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
           <div style='font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;'>SRI BALAJI GEARS</div>
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style='margin-top:4px;'>
-            <strong>Hotline:</strong> <a href='tel:+917373334411' style='color:#efad2d; text-decoration:none;'>+91 73733 34411</a> &middot; 
-            <strong>Email:</strong> <a href='mailto:erp@sribalajigears.com' style='color:#efad2d; text-decoration:none;'>erp@sribalajigears.com</a>
+            <strong>Direct Plant Line:</strong> <a href='tel:+917373334411' style='color:#efad2d; text-decoration:none;'>+91 73733 34411</a> &middot; 
+            <strong>Email:</strong> <a href='mailto:prabhu@sribalajigears.com' style='color:#efad2d; text-decoration:none;'>prabhu@sribalajigears.com</a>
           </div>
         </td>
       </tr>
@@ -520,7 +570,8 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
 </html>
     ";
 
-    sendMailMultipart($to, $subject, $htmlBody, config('ERP_EMAIL', 'erp@sribalajigears.com'), 'Sri Balaji Gears');
+    sendMailMultipart($to, $subject, $htmlBody, config('ERP_EMAIL', 'prabhu@sribalajigears.com'), 'Sri Balaji Gears');
+}
 }
 
 /**
