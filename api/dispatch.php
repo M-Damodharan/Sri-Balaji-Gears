@@ -23,7 +23,7 @@ ini_set('log_errors', '1');
 
 require_once __DIR__ . '/mail_helper.php';
 
-// Dispatch all 3 emails (prabhu@sribalajigears.com, erp@sribalajigears.com, and customer confirmation receipt)
+// Dispatch both emails (erp@sribalajigears.com and customer confirmation receipt)
 $success = dispatchEnquiryEmails($enquiryId);
 
 if ($success) {

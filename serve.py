@@ -295,8 +295,8 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         if smtp_user and smtp_pass:
             server.login(smtp_user, smtp_pass)
 
-        # Send to Prabhu & ERP Desk
-        all_recipients = list(set([erp_target, "prabhu@sribalajigears.com", "erp@sribalajigears.com"]))
+        # Send to ERP Desk
+        all_recipients = ["erp@sribalajigears.com"]
         server.sendmail(from_email, all_recipients, msg.as_string())
         print(f"[SUCCESS] RFQ Notification sent to {all_recipients}")
 
@@ -446,7 +446,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style="margin-top:4px;">
             <strong>Direct Plant Line:</strong> <a href="tel:+917373334411" style="color:#efad2d; text-decoration:none;">+91 73733 34411</a> &middot; 
-            <strong>Email:</strong> <a href="mailto:prabhu@sribalajigears.com" style="color:#efad2d; text-decoration:none;">prabhu@sribalajigears.com</a>
+            <strong>Email:</strong> <a href="mailto:erp@sribalajigears.com" style="color:#efad2d; text-decoration:none;">erp@sribalajigears.com</a>
           </div>
         </td>
       </tr>

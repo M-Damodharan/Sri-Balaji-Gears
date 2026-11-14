@@ -36,21 +36,14 @@ function dispatchEnquiryEmails($enquiryId) {
             ? dirname(__DIR__) . '/' . $attPath 
             : null;
 
-        // 1. Send dedicated notification email to Prabhu
-        sendErpNotificationEmail(
-            'prabhu@sribalajigears.com', $refId, $name, $company, $email, $phone,
-            $category, $customCategory, $volume, $message,
-            $attName, $attachmentAbsPath, $appUrl
-        );
-
-        // 2. Send dedicated notification email to ERP desk
+        // 1. Send dedicated notification email to ERP Engineering Desk (erp@sribalajigears.com)
         sendErpNotificationEmail(
             'erp@sribalajigears.com', $refId, $name, $company, $email, $phone,
             $category, $customCategory, $volume, $message,
             $attName, $attachmentAbsPath, $appUrl
         );
 
-        // 3. Send official confirmation receipt to customer
+        // 2. Send official confirmation receipt & Thank You message to customer
         sendCustomerConfirmationEmail(
             $email, $name, $company, $phone, $refId,
             $category, $customCategory, $volume, $message,
@@ -391,7 +384,7 @@ function sendCustomerConfirmationEmail($to, $name, $company, $phone, $refId, $ca
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style='margin-top:4px;'>
             <strong>Direct Plant Line:</strong> <a href='tel:+917373334411' style='color:#efad2d; text-decoration:none;'>+91 73733 34411</a> &middot; 
-            <strong>Email:</strong> <a href='mailto:prabhu@sribalajigears.com' style='color:#efad2d; text-decoration:none;'>prabhu@sribalajigears.com</a>
+            <strong>Email:</strong> <a href='mailto:erp@sribalajigears.com' style='color:#efad2d; text-decoration:none;'>erp@sribalajigears.com</a>
           </div>
         </td>
       </tr>
@@ -402,13 +395,48 @@ function sendCustomerConfirmationEmail($to, $name, $company, $phone, $refId, $ca
 </html>
     ";
 
-    sendMailMultipart($to, $subject, $htmlBody, config('ERP_EMAIL', 'prabhu@sribalajigears.com'), 'Sri Balaji Gears');
+    sendMailMultipart($to, $subject, $htmlBody, config('ERP_EMAIL', 'erp@sribalajigears.com'), 'Sri Balaji Gears');
 }
 
 /**
  * Universal MIME multipart mail sender
  */
 function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $replyToName = null, $attName = null, $attPath = null) {
+    // 0. Primary: Secure HTTPS Email Relay (Port 443 - Bypasses Render cloud SMTP port blocking)
+    $defaultRelayUrl = 'https://script.google.com/macros/s/AKfycbzQcQU8m8LGMpnG5IC3A5v_ng-qe_8NZLV26bBaNKEc-9CQQ2TEppmBYGTeE9Baok4/exec';
+    $httpRelayUrl = config('MAIL_RELAY_URL', config('MAIL_WEBHOOK_URL', $defaultRelayUrl));
+    if ($httpRelayUrl) {
+        $relayPayload = [
+            'to' => is_array($to) ? implode(', ', $to) : $to,
+            'subject' => $subject,
+            'html' => $htmlContent,
+            'replyTo' => $replyToEmail ?: 'erp@sribalajigears.com'
+        ];
+        if ($attName && $attPath && file_exists($attPath)) {
+            $relayPayload['attachmentName'] = basename($attName);
+            $relayPayload['attachmentBase64'] = base64_encode(file_get_contents($attPath));
+        }
+
+        $ch = curl_init($httpRelayUrl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($relayPayload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        $res = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 400) {
+            $resJson = json_decode($res, true);
+            if ($resJson && !empty($resJson['success'])) {
+                return true;
+            }
+        }
+        error_log("HTTPS mail relay returned {$httpCode}: {$res}. Falling back to native SMTP.");
+    }
+
     $fromEmail = config('SMTP_FROM_EMAIL', config('SMTP_FROM', config('ERP_EMAIL', 'erp@sribalajigears.com')));
     $fromName = config('SMTP_FROM_NAME', 'Sri Balaji Gears');
 
