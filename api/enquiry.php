@@ -201,7 +201,34 @@ try {
         ':ua' => $userAgent,
     ]);
 
-    // 6. Send Emails
+    // 6. Return Success Response Immediately (Sub-second response to customer)
+    $jsonResponse = json_encode([
+        'success' => true,
+        'message' => 'Thank you! Your enquiry has been successfully transmitted directly to our ERP engineering desk.',
+        'reference_id' => $refId
+    ]);
+
+    // Send HTTP response immediately so customer browser transitions to SUCCESS instantly
+    ignore_user_abort(true);
+    set_time_limit(180);
+
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Length: ' . strlen($jsonResponse));
+    header('Connection: close');
+    echo $jsonResponse;
+
+    // Flush all output buffers to client
+    if (function_exists('fastcgi_finish_request')) {
+        fastcgi_finish_request();
+    } else {
+        while (ob_get_level() > 0) {
+            ob_end_flush();
+        }
+        @ob_flush();
+        flush();
+    }
+
+    // 7. Background Asynchronous Email Transmission (Runs silently on server without blocking customer)
     $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.in'), '/');
     $attachmentAbsPath = $hasAttachment ? dirname(__DIR__) . '/' . $attachmentPath : null;
 
@@ -226,12 +253,7 @@ try {
         $attachmentName
     );
 
-    // Return Success
-    echo json_encode([
-        'success' => true,
-        'message' => 'Thank you! Your enquiry has been successfully transmitted directly to our ERP engineering desk.',
-        'reference_id' => $refId
-    ]);
+    exit;
 
 } catch (Exception $e) {
     http_response_code(500);

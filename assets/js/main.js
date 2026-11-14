@@ -437,6 +437,10 @@
                 <button type="button" class="btn-reset-form" onclick="location.reload()">Submit Another Drawing</button>
               </div>
             `;
+            // Smoothly scroll confirmation into center view immediately
+            try {
+              statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (scrollErr) {}
           }
 
           showToast(`RFQ Transmitted! Ref: ${data.reference_id}`, '✓');
