@@ -210,7 +210,7 @@ try {
     }
 
     // 6. Spawn Detached Asynchronous Background Dispatch Worker
-    // This delivers all 3 emails (prabhu@, erp@, and customer receipt) in the background
+    // Delivers internal notification to erp@ and confirmation receipt to customer in background
     // without blocking the user's browser for 30-50 seconds.
     $phpBin = (defined('PHP_BINARY') && is_executable(PHP_BINARY) && strpos(PHP_BINARY, 'php') !== false) ? PHP_BINARY : 'php';
     if (!is_executable($phpBin) && file_exists('/usr/local/bin/php')) {
