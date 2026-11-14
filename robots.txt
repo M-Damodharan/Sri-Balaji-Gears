@@ -6,4 +6,4 @@ Disallow: /config/
 Disallow: /data/
 Disallow: /uploads/
 
-Sitemap: https://www.sribalajigears.in/sitemap.xml
+Sitemap: https://sribalajigears.in/sitemap.xml
