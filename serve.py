@@ -304,7 +304,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         cust_msg = MIMEMultipart("alternative")
         cust_msg["From"] = f"{from_name} <{from_email}>"
         cust_msg["To"] = email
-        cust_msg["Subject"] = f"Thank You for Your RFQ [{ref_id}] - Sri Balaji Gears Hosur"
+        cust_msg["Subject"] = f"Thank You for Your RFQ [{ref_id}] - Official Tracking Reference ID - Sri Balaji Gears"
 
         att_confirm = f"<strong style='color:#059669;'>✓ {att_name}</strong> (Received &amp; Logged)" if att_name else "<span style='color:#94a3b8;'>No attachment submitted</span>"
 
@@ -349,19 +349,19 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
 
       <!-- Subheader with Reference ID & Tracking Status -->
       <tr>
-        <td style="background-color:#f8fafc; padding:16px 28px; border-bottom:1px solid #e2e8f0;">
+        <td style="background-color:#f8fafc; padding:18px 28px; border-bottom:1px solid #e2e8f0;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td>
-                <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Tracking Reference ID</div>
-                <div style="font-size:17px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:3px;">
-                  <span style="background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:4px; border:1px solid #fde68a;">{ref_id}</span>
+                <div style="font-size:11px; font-weight:800; color:#b45309; text-transform:uppercase; letter-spacing:0.08em;">★ OFFICIAL TRACKING REFERENCE ID</div>
+                <div style="font-size:19px; font-weight:900; color:#0f172a; font-family:ui-monospace, monospace; margin-top:4px;">
+                  <span style="background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:6px; border:1px solid #fde68a; letter-spacing:0.05em;">{ref_id}</span>
                 </div>
               </td>
               <td align="right">
-                <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Current Status</div>
-                <div style="font-size:12px; font-weight:700; color:#059669; margin-top:3px;">
-                  ● Under Engineering Appraisal
+                <div style="font-size:11px; font-weight:800; color:#065f46; text-transform:uppercase; letter-spacing:0.08em;">● OFFICIAL TRACKING STATUS</div>
+                <div style="font-size:13px; font-weight:800; color:#059669; margin-top:4px;">
+                  Under Engineering Appraisal (24–48h)
                 </div>
               </td>
             </tr>
@@ -373,8 +373,20 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
       <tr>
         <td style="padding:26px 28px; font-size:14px; line-height:1.6;">
           
-          <p style="margin-top:0;">Dear <strong>{name}</strong>,</p>
-          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong>. Your technical parameters and component requirements have been logged into our Hosur plant ERP system.</p>
+          <h2 style="margin-top:0; font-size:18px; color:#0f172a; font-weight:800;">Thank You for Your RFQ Enquiry</h2>
+          <p>Dear <strong>{name}</strong>,</p>
+          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong>. Your technical parameters and component requirements have been officially registered in our Hosur plant ERP engineering system with Reference ID: <strong style="color:#92400e; font-family:monospace;">{ref_id}</strong>.</p>
+
+          <!-- Highlighted Official Tracking Banner -->
+          <div style="background-color:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; border-radius:6px; padding:14px 18px; margin:16px 0;">
+            <div style="font-size:11px; font-weight:800; color:#92400e; text-transform:uppercase; letter-spacing:0.08em;">🔒 OFFICIAL RFQ TRACKING RECORD</div>
+            <div style="font-size:15px; font-weight:800; color:#78350f; margin-top:4px;">
+              Tracking ID: <span style="font-family:ui-monospace, monospace; background:#fef3c7; padding:2px 8px; border-radius:4px;">{ref_id}</span>
+            </div>
+            <div style="font-size:12px; color:#92400e; margin-top:4px;">
+              Please quote this official Reference ID for any follow-up or CAD revision regarding your quotation.
+            </div>
+          </div>
 
           <!-- Parameter Summary Table -->
           <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse; margin:18px 0; font-size:13px; border:1px solid #e2e8f0; border-radius:6px;">
