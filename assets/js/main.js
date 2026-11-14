@@ -346,6 +346,55 @@
     });
   }
 
+  // Global Smooth RFQ Form Reset Handler (no full page reload)
+  window.resetEnquiryForm = function() {
+    const enquiryForm = document.getElementById('enquiry');
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const otherWrap = document.getElementById('otherCategoryWrap');
+    const otherInput = document.getElementById('otherCategory');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const dropzonePrompt = document.getElementById('dropzonePrompt');
+
+    if (enquiryForm) enquiryForm.reset();
+    if (otherWrap) otherWrap.style.display = 'none';
+    if (otherInput) {
+      otherInput.removeAttribute('required');
+      otherInput.value = '';
+    }
+    if (fileNameDisplay) fileNameDisplay.textContent = '';
+    if (dropzonePrompt) dropzonePrompt.style.display = 'flex';
+
+    if (statusEl) {
+      statusEl.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+      statusEl.style.opacity = '0';
+      statusEl.style.transform = 'translateY(-6px)';
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+        statusEl.className = 'form-status';
+        statusEl.innerHTML = '';
+        statusEl.style.opacity = '';
+        statusEl.style.transform = '';
+      }, 260);
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'SUBMIT ENQUIRY / RFQ';
+      if (btnIcon) btnIcon.textContent = '↗';
+    }
+
+    if (enquiryForm) {
+      try {
+        enquiryForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (e) {}
+      const firstField = enquiryForm.querySelector('input:not([type=hidden])');
+      if (firstField) setTimeout(() => firstField.focus(), 350);
+    }
+  };
+
   // 13. Contact & RFQ Form Handler (Direct ERP Backend Transmission)
   const enquiryForm = document.getElementById('enquiry');
   if (enquiryForm) {
@@ -357,10 +406,6 @@
       const btnIcon = document.getElementById('btnIcon');
       const statusEl = document.getElementById('status');
 
-      // Preserve original button text
-      const origText = btnText ? btnText.textContent : 'SUBMIT ENQUIRY / RFQ';
-      const origIcon = btnIcon ? btnIcon.textContent : '↗';
-
       // Set loading state
       if (submitBtn) submitBtn.disabled = true;
       if (btnText) btnText.textContent = 'TRANSMITTING RFQ...';
@@ -369,7 +414,7 @@
       if (statusEl) {
         statusEl.className = 'form-status info';
         statusEl.style.display = 'block';
-        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; attachments to <strong>prabhu@sribalajigears.com</strong> &amp; <strong>erp@sribalajigears.com</strong>...`;
+        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; specifications directly to ERP engineering desk...`;
       }
 
       const formData = new FormData(enquiryForm);
@@ -434,7 +479,7 @@
               </p>
               <div class="rfq-success-footer">
                 <span class="rfq-meta">⚡ Engineering Review Turnaround: 24–48 Hours</span>
-                <button type="button" class="btn-reset-form" onclick="location.reload()">Submit Another Drawing</button>
+                <button type="button" class="btn-reset-form" onclick="window.resetEnquiryForm()">Submit Another Drawing</button>
               </div>
             `;
             // Smoothly scroll confirmation into center view immediately
