@@ -33,7 +33,7 @@ services:
       - key: SMTP_USER
         value: erp@sribalajigears.com
       - key: SMTP_PASS
-        value: sbgerp@2026
+        sync: false
       - key: SMTP_SECURE
         value: ssl
       - key: SMTP_FROM_EMAIL

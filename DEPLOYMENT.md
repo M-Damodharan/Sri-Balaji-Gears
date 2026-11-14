@@ -84,7 +84,7 @@ Configure these variables in Render under **Environment** (or in a `.env` file f
 | `SMTP_HOST` | `smtp.rediffmailpro.com` (Rediffmail Pro) | Outgoing SMTP server hostname |
 | `SMTP_PORT` | `465` (SSL) | SMTP port |
 | `SMTP_USER` | `erp@sribalajigears.com` | SMTP authentication username / account |
-| `SMTP_PASS` | `sbgerp@2026` | SMTP authentication password |
+| `SMTP_PASS` | *(Rediffmail Pro Password)* | SMTP authentication password (never commit to git) |
 | `SMTP_SECURE` | `ssl` | Transport encryption protocol |
 | `SMTP_FROM_EMAIL` | `erp@sribalajigears.com` | From email header for notifications |
 | `SMTP_FROM_NAME` | `Sri Balaji Gears RFQ Portal` | Sender display name |
