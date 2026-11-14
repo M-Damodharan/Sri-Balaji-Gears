@@ -10,12 +10,13 @@ import sqlite3
 import urllib.parse
 import uuid
 import smtplib
+import threading
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from datetime import datetime
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
@@ -288,20 +289,25 @@ class SBGRequestHandler(SimpleHTTPRequestHandler):
                 conn.commit()
                 conn.close()
 
-                # Trigger SMTP email sending
-                dispatch_emails(
-                    ref_id,
-                    fields.get("name", ""),
-                    fields.get("company", ""),
-                    fields.get("email", ""),
-                    fields.get("phone", ""),
-                    fields.get("projectType", "General RFQ"),
-                    fields.get("otherCategory", ""),
-                    fields.get("quantity", "Not specified"),
-                    fields.get("message", ""),
-                    att_name,
-                    att_path
+                # Trigger background SMTP email sending without blocking HTTP response
+                email_thread = threading.Thread(
+                    target=dispatch_emails,
+                    args=(
+                        ref_id,
+                        fields.get("name", ""),
+                        fields.get("company", ""),
+                        fields.get("email", ""),
+                        fields.get("phone", ""),
+                        fields.get("projectType", "General RFQ"),
+                        fields.get("otherCategory", ""),
+                        fields.get("quantity", "Not specified"),
+                        fields.get("message", ""),
+                        att_name,
+                        att_path
+                    ),
+                    daemon=True
                 )
+                email_thread.start()
 
                 resp_obj = {
                     "success": True,
@@ -324,7 +330,7 @@ class SBGRequestHandler(SimpleHTTPRequestHandler):
 
 def run_server():
     server_address = ("127.0.0.1", PORT)
-    httpd = HTTPServer(server_address, SBGRequestHandler)
+    httpd = ThreadingHTTPServer(server_address, SBGRequestHandler)
     print(f"Sri Balaji Gears Local Server running at: http://localhost:{PORT}/")
     try:
         httpd.serve_forever()
