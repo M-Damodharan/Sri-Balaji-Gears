@@ -572,7 +572,6 @@ function sendCustomerConfirmationEmail($to, $name, $company, $phone, $refId, $ca
 
     sendMailMultipart($to, $subject, $htmlBody, config('ERP_EMAIL', 'prabhu@sribalajigears.com'), 'Sri Balaji Gears');
 }
-}
 
 /**
  * Universal MIME multipart mail sender
