@@ -187,7 +187,7 @@ try {
 
     // 6. Send Emails
     $destEmail = config('ERP_EMAIL', 'erp@sribalajigears.com');
-    $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.in'), '/');
+    $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.com'), '/');
     $attachmentAbsPath = $hasAttachment ? dirname(__DIR__) . '/' . $attachmentPath : null;
 
     // Send ERP Notification Email
@@ -328,7 +328,7 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
         <div class='footer'>
           <strong>Sri Balaji Gears</strong><br>
           SIPCOT Industrial Complex, Phase I, Hosur, Tamil Nadu 635126, India<br>
-          Phone: +91 87782 78761 &middot; Email: erp@sribalajigears.com &middot; Web: www.sribalajigears.in
+          Phone: +91 87782 78761 &middot; Email: erp@sribalajigears.com &middot; Web: www.sribalajigears.com
         </div>
       </div>
     </body>
@@ -377,6 +377,105 @@ function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $r
 
     $body .= "--{$boundary}--";
 
-    // Send using mail()
+    // 1. If SMTP is configured, attempt direct socket SMTP transmission
+    $smtpHost = config('SMTP_HOST');
+    $smtpEnabled = config('SMTP_ENABLED');
+    if (($smtpEnabled === 'true' || $smtpEnabled === '1' || !empty($smtpHost)) && !empty($smtpHost)) {
+        $port = (int)config('SMTP_PORT', 587);
+        $user = config('SMTP_USER', '');
+        $pass = config('SMTP_PASS', '');
+        $crypto = strtolower(config('SMTP_ENCRYPTION', config('SMTP_SECURE', 'tls')));
+
+        $smtpSuccess = sendViaSmtpSocket($to, $subject, $body, $headers, $smtpHost, $port, $user, $pass, $crypto);
+        if ($smtpSuccess) {
+            return true;
+        }
+        error_log("Native SMTP delivery failed. Falling back to PHP mail().");
+    }
+
+    // 2. Standard server mail() dispatch
     return @mail($to, $subject, $body, implode("\r\n", $headers));
+}
+
+/**
+ * Lightweight, zero-dependency SMTP client via standard PHP sockets
+ */
+function sendViaSmtpSocket($to, $subject, $body, $headers, $host, $port, $user, $pass, $crypto = 'tls') {
+    $timeout = 10;
+    $context = stream_context_create([
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ]);
+
+    $protocol = ($crypto === 'ssl' || $port == 465) ? 'ssl://' : 'tcp://';
+    $socket = @stream_socket_client($protocol . $host . ':' . $port, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context);
+    if (!$socket) {
+        error_log("SMTP connection failed to {$host}:{$port} - {$errstr} ({$errno})");
+        return false;
+    }
+
+    $read = function() use ($socket) {
+        $data = '';
+        while ($str = fgets($socket, 515)) {
+            $data .= $str;
+            if (substr($str, 3, 1) === ' ') break;
+        }
+        return $data;
+    };
+
+    $write = function($cmd) use ($socket) {
+        fputs($socket, $cmd . "\r\n");
+    };
+
+    $read(); // Initial service banner
+    $write("EHLO " . (gethostname() ?: 'sribalajigears.com'));
+    $read();
+
+    if ($crypto === 'tls' && $port != 465) {
+        $write("STARTTLS");
+        $res = $read();
+        if (strpos($res, '220') === 0) {
+            stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            $write("EHLO " . (gethostname() ?: 'sribalajigears.com'));
+            $read();
+        }
+    }
+
+    if (!empty($user) && !empty($pass)) {
+        $write("AUTH LOGIN");
+        $read();
+        $write(base64_encode($user));
+        $read();
+        $write(base64_encode($pass));
+        $res = $read();
+        if (strpos($res, '235') !== 0) {
+            error_log("SMTP AUTH rejected for user: {$user}");
+            $write("QUIT");
+            fclose($socket);
+            return false;
+        }
+    }
+
+    $fromMail = config('SMTP_FROM_EMAIL', config('ERP_EMAIL', 'erp@sribalajigears.com'));
+    $write("MAIL FROM: <{$fromMail}>");
+    $read();
+
+    $write("RCPT TO: <{$to}>");
+    $read();
+
+    $write("DATA");
+    $read();
+
+    $payload = implode("\r\n", $headers) . "\r\nSubject: {$subject}\r\nTo: <{$to}>\r\n\r\n" . $body . "\r\n.\r\n";
+    fputs($socket, $payload);
+    $res = $read();
+
+    $write("QUIT");
+    $read();
+    fclose($socket);
+
+    return strpos($res, '250') === 0;
 }

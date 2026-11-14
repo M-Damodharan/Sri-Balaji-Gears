@@ -1,39 +1,38 @@
-# Sri Balaji Gears — Enterprise Automotive Manufacturing Website
+# Sri Balaji Gears — Enterprise Automotive Manufacturing Website & ERP Portal
 
-A corporate website for **Sri Balaji Gears** (Hosur, Tamil Nadu), engineered for automotive Tier-1 manufacturing credibility, high responsiveness across all devices, and interactive UI/UX features.
+A modern, production-grade corporate website and RFQ enquiry management portal for **Sri Balaji Gears** (SIPCOT Industrial Complex, Phase I, Hosur, Tamil Nadu), engineered for Tier-1 automotive manufacturing credibility, seamless customer RFQ processing, and Google search visibility.
 
 ---
 
-## 🌟 Key Features & UI/UX Implementations
+## 🌟 Architecture & Core Capabilities
 
-1. **Fully Responsive Across All Devices**:
-   - Tailored layouts for **Mobile Phones (320px–480px)**, **Tablets (768px–1024px)**, **Laptops (1024px–1440px)**, and **Ultra-wide Desktops (1440px+)**.
-   - Fluid typography with CSS `clamp()`, safe-area insets for mobile notches, and touch-target accessibility (>44px).
-   - Horizontal overflow prevention and sticky table horizontal scrolling.
+1. **Frontend Experience (9 Public Pages)**:
+   - **Modern Responsive Design**: Optimized across mobile phones (320px–480px), tablets (768px–1024px), laptops, and 4K ultra-wide screens using CSS `clamp()`, responsive grids, and touch target optimization (>44px).
+   - **Interactive Components**: Real-time counter animations, tabbed product portfolio, modal image lightbox for compliance certificates, expandable FAQ accordions, and one-click copy buttons for phone/email/address with toast feedback.
+   - **9 Complete Pages**: `index.html` (Home), `about.html`, `manufacturing.html`, `products.html`, `infrastructure.html`, `quality.html`, `certifications.html`, `customers.html` (showcasing UNO MINDA & TVS Motor), and `contact.html`.
 
-2. **Enterprise Navigation & Mobile Drawer**:
-   - Sticky glassmorphic header with blur and scroll-shrink dynamics.
-   - Off-canvas mobile drawer with smooth slide-in, backdrop blur, category links, click-to-call, and click-to-email.
-   - Dynamic active page indicator on both desktop navigation and mobile drawer.
+2. **Customer Enquiry & ERP Integration (`erp@sribalajigears.com`)**:
+   - **Instant RFQ Submission**: Connects directly to `erp@sribalajigears.com` via backend API (`/api/enquiry.php`).
+   - **Drawing / CAD File Uploads**: Validates and accepts 2D/3D CAD (`.dwg`, `.dxf`, `.step`, `.stp`, `.iges`), `.pdf`, Excel, Word, ZIP, and image specifications up to 15MB.
+   - **Dual-Action Delivery**: Sends an HTML notification to the plant ERP desk and a confirmation receipt to the customer.
+   - **Tracking Reference**: Automatically issues unique IDs (e.g. `SBG-RFQ-YYYYMMDD-XXXX`).
+   - **Anti-Spam & Security**: Invisible honeypot trap (`website_hp`) and IP rate limiting (15-second cooldown).
 
-3. **Interactive Components & Micro-Interactions**:
-   - **Interactive Number Counters**: Automatically count up when scrolled into view (1999 Established, 400+ Employees, 70,000 Sq. Ft. Land Area, 50,000 Sq. Ft. Built-up Area).
-   - **Interactive Tabbed Product Showcase**: Seamless switching between 3-Seat Bus Assemblies, 2-Seat Passenger Frames, Auto Frame Welding, and Heavy Stamping.
-   - **Interactive Modal / Lightbox**: High-resolution zoom inspection for management system reference artwork (IATF 16949, ISO 9001, EMS, OHSMS).
-   - **Interactive FAQ Accordion**: Expandable Q&A for automotive procurement, engineering blueprints, and weld code standards.
-   - **One-Click Clipboard Copying**: Instant copy buttons for phone (`+91 87782 78761`), email (`erp@sribalajigears.com`), and plant address with animated toast notifications.
-   - **Floating Action Button (FAB) & Scroll-to-Top**: Quick "Request RFQ" trigger and smooth scroll-to-top button.
+3. **Admin Enquiry Management Dashboard (`/admin/`)**:
+   - Secure session-based authentication portal (`/admin/login.php`).
+   - Comprehensive enquiries list with status management (New, In Review, Quoted, Closed).
+   - Attachment download links with secure path traversal protection (`/api/download.php`).
+   - **1-Click Export to CSV / Excel** for ERP record keeping.
 
-4. **9 Complete Corporate Pages**:
-   - **Home (`index.html`)**: Hero with animated counters, core capabilities, featured 3-seat bus assembly spotlight, manual vs. robotic welding comparison, customer showcase, FAQ, and CTA.
-   - **About (`about.html`)**: Company history since 1999, historical milestones stepper (1999–2024+), 4 core manufacturing pillars, and enterprise fact sheet.
-   - **Manufacturing (`manufacturing.html`)**: 6-step integrated workflow pipeline, 6-axis robotic vs. manual welding comparison, installed machinery fleet table.
-   - **Products (`products.html`)**: Interactive tabbed product portfolio, engineering data sheet, AIS 023 compliance, tubular ERW material specs.
-   - **Infrastructure (`infrastructure.html`)**: 70,000 sq. ft. campus dashboard, 6 specialized industrial bays (press, bending, robotic, manual, tool room, lab), SIPCOT Hosur highway logistics.
-   - **Quality (`quality.html`)**: 3-stage gateway (IQC, IPQC, PDI), weld macro-etch lab, dye penetrant crack testing, and quality scorecard (<50 PPM target).
-   - **Certifications (`certifications.html`)**: Interactive gallery with click-to-zoom modal for IATF 16949, ISO 9001, EMS, and OHSMS, plus audit scope matrix.
-   - **Customers (`customers.html`)**: In-depth profiles for UNO MINDA (strategic bus seating partner) and TVS Motor Company (automotive chassis frame partner), with supplier rating metrics.
-   - **Contact (`contact.html`)**: Interactive RFQ portal form with requirement selector, volume estimation, formatted mailto generation, plant directory, copy buttons, and transit directions from Bengaluru.
+4. **Production Hosting Preparation (Render & Apache)**:
+   - Configured for **Render Web Service** via [`Dockerfile`](./Dockerfile) and [`render.yaml`](./render.yaml).
+   - Dynamic port binding for Render via [`docker-entrypoint.sh`](./docker-entrypoint.sh).
+   - Compatible with traditional Apache / cPanel / Shared hosting via [`.htaccess`](./.htaccess) and [`website-upload.zip`](./website-upload.zip).
+
+5. **Google SEO & Integrations**:
+   - **Schema.org Structured Data**: Complete `AutomotiveBusiness`, `Organization`, `LocalBusiness`, and `BreadcrumbList` JSON-LD schemas.
+   - **Search Console & Analytics**: Ready for Google Search Console verification and Google Analytics 4 (`G-XXXXXXXXXX`).
+   - **Automated Sitemap**: Auto-generated [`sitemap.xml`](./sitemap.xml) and [`robots.txt`](./robots.txt) pointing to `https://www.sribalajigears.com/`.
 
 ---
 
@@ -41,26 +40,62 @@ A corporate website for **Sri Balaji Gears** (Hosur, Tamil Nadu), engineered for
 
 - **Legal Entity**: Sri Balaji Gears
 - **Established**: 1999 (25+ years continuous manufacturing)
-- **Workforce**: 400 Employees (updated at company request)
-- **Total Land Area**: 70,000 Sq. Ft.
-- **Built-Up Area**: Approx. 50,000 Sq. Ft.
+- **Workforce**: 400 Employees
+- **Campus Area**: 70,000 Sq. Ft. Total Land Area | 50,000 Sq. Ft. Built-up
 - **Location**: SIPCOT Industrial Complex Phase I, Hosur, Tamil Nadu 635126, India
-- **Phone**: +91 87782 78761
-- **Email**: erp@sribalajigears.com
-- **Core OEM Partners**:
+- **Coordinates**: 12.7409° N, 77.8253° E
+- **Corporate Email**: [erp@sribalajigears.com](mailto:erp@sribalajigears.com)
+- **Plant Hotline**: +91 87782 78761
+- **Domain**: [sribalajigears.com](https://www.sribalajigears.com)
+- **Key OEM Customers**:
   - **UNO MINDA**: Dedicated bus seat frame welding (~90% specialized work focus)
   - **TVS Motor Company**: Auto body frame welding parts (~50% automotive focus)
 
 ---
 
-## 🚀 How to Run & Preview
+## 🚀 Quick Start & Local Preview
 
-Open `index.html` in any modern web browser or serve via Python local server:
-
+### Option 1: PHP Built-in Server (Full Features including Form & Admin)
 ```bash
-# Start a local web server:
-python -m http.server 8080
+# Run PHP server with SQLite support:
+php -S localhost:8000
 
-# Then open in browser:
+# Open in browser:
+http://localhost:8000
+# Admin Dashboard:
+http://localhost:8000/admin/login.php
+```
+
+### Option 2: Docker Container
+```bash
+# Build the production image:
+docker build -t sri-balaji-gears .
+
+# Run container on port 8080:
+docker run -p 8080:80 sri-balaji-gears
+
+# Open:
 http://localhost:8080
 ```
+
+### Option 3: Python Server (Static Preview Only)
+```bash
+python -m http.server 8080
+# Note: Form submission will automatically offer fallback to email client in static mode.
+```
+
+---
+
+## 📖 Detailed Documentation Guides
+
+- 📘 [**Render & Server Deployment Guide (DEPLOYMENT.md)**](./DEPLOYMENT.md): Detailed Render Blueprint setup, environment variables, persistent disk setup, custom domain DNS, and Apache hosting.
+- 📗 [**Google SEO & Integration Guide (SEO_SETUP.md)**](./SEO_SETUP.md): Step-by-step instructions for Google Search Console verification, GA4 setup, sitemap submission, and Google Business Profile linking.
+- ⚙️ [**Environment Variables Template (.env.example)**](./.env.example): Production environment variables template.
+
+---
+
+## 🔒 Security & Data Protection
+
+- SQLite database (`data/enquiries.db`) and uploaded files (`uploads/`) are protected against direct web URL browsing via `.htaccess`.
+- Passwords, email credentials, and API keys are stored strictly in environment variables, never committed to git.
+- All SQL operations utilize prepared statements with parameter binding to prevent SQL injection.

@@ -1,0 +1,11 @@
+.git
+.github
+*.zip
+*.log
+data/*.db
+data/*.sqlite
+uploads/*
+!uploads/.htaccess
+!uploads/.gitkeep
+!data/.htaccess
+!data/.gitkeep
