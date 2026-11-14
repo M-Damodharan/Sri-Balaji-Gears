@@ -12,8 +12,8 @@ Google Search Console monitors search performance, indexes pages, and identifies
 1. Visit [Google Search Console](https://search.google.com/search-console/).
 2. Select **Add Property**.
 3. Choose one of two property types:
-   - **Domain Property** (Recommended): Enter `sribalajigears.com` (covers both `https://`, `http://`, `www.`, and non-`www`).
-   - **URL Prefix**: Enter `https://www.sribalajigears.com/`.
+   - **Domain Property** (Recommended): Enter `sribalajigears.in` (covers both `https://`, `http://`, `www.`, and non-`www`).
+   - **URL Prefix**: Enter `https://www.sribalajigears.in/`.
 
 ### Step 2: Choose Your Verification Method
 
@@ -48,10 +48,10 @@ Google Search Console monitors search performance, indexes pages, and identifies
 
 The sitemap informs Google of all official URLs, priorities, and update frequencies.
 
-- **Sitemap Public URL**: `https://www.sribalajigears.com/sitemap.xml`
+- **Sitemap Public URL**: `https://www.sribalajigears.in/sitemap.xml`
 - **Robots Reference**: Configured in [`robots.txt`](./robots.txt):
   ```txt
-  Sitemap: https://www.sribalajigears.com/sitemap.xml
+  Sitemap: https://www.sribalajigears.in/sitemap.xml
   ```
 
 ### How to Submit:
@@ -80,7 +80,7 @@ Track OEM visitors, RFQ page conversions, and customer interactions across the s
 1. Log into [Google Analytics](https://analytics.google.com/).
 2. Navigate to **Admin** -> **Data Streams** -> **Web**.
 3. Enter:
-   - **Website URL**: `https://www.sribalajigears.com`
+   - **Website URL**: `https://www.sribalajigears.in`
    - **Stream Name**: `Sri Balaji Gears Web Portal`
 4. Copy your **Measurement ID** (format: `G-XXXXXXXXXX`).
 
@@ -115,8 +115,8 @@ Ensure your Google Business Profile matches the website structured data exactly:
 - **Address**: `SIPCOT Industrial Complex, Phase I, Hosur, Tamil Nadu 635126, India`
 - **Latitude / Longitude**: `12.7409° N, 77.8253° E`
 - **Phone Number**: `+91 73733 34411`
-- **Official Website URL**: `https://www.sribalajigears.com/`
-- **Appointment / RFQ URL**: `https://www.sribalajigears.com/contact.html`
+- **Official Website URL**: `https://www.sribalajigears.in/`
+- **Appointment / RFQ URL**: `https://www.sribalajigears.in/contact.html`
 - **Operating Hours**:
   - Monday – Saturday: `08:30 – 18:00 IST`
   - Sunday: `Closed (Maintenance & 5S)`
@@ -134,4 +134,4 @@ The website is already built with enterprise structured data compliant with sche
 3. **Open Graph & Twitter Cards**:
    - Ensures high-impact social preview cards with titles, descriptions, and logos whenever links are shared on LinkedIn, WhatsApp, or email clients.
 4. **Canonical URL Tags**:
-   - Enforces the authoritative HTTPS `https://www.sribalajigears.com/` URL on every page to prevent duplicate content indexing penalties.
+   - Enforces the authoritative HTTPS `https://www.sribalajigears.in/` URL on every page to prevent duplicate content indexing penalties.

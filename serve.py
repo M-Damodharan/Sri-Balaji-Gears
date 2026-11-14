@@ -106,7 +106,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         msg["Reply-To"] = f"{name} <{email}>"
         msg["Subject"] = f"New Automotive RFQ [{ref_id}] - {company} ({cat_display})"
 
-        app_url = get_env("APP_URL", "https://www.sribalajigears.com").rstrip("/")
+        app_url = get_env("APP_URL", "https://www.sribalajigears.in").rstrip("/")
         att_display = f"<strong style='color:#059669;'>✓ {att_name}</strong> (Securely attached below)" if att_name else "<span style='color:#94a3b8;'>No attachment submitted</span>"
 
         html_body = f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

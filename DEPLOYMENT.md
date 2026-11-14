@@ -74,8 +74,8 @@ Configure these variables in Render under **Environment** (or in a `.env` file f
 | Variable | Recommended Production Value | Description |
 | :--- | :--- | :--- |
 | `APP_ENV` | `production` | Sets application mode and suppresses public error displays |
-| `APP_URL` | `https://www.sribalajigears.com` | Primary canonical URL of the company website |
-| `ERP_EMAIL` | `erp@sribalajigears.com` | Target recipient for all RFQ and technical enquiries |
+| `APP_URL` | `https://www.sribalajigears.in` | Primary canonical URL of the company website |
+| `ERP_EMAIL` | `erp@sribalajigears.in` | Target recipient for all RFQ and technical enquiries |
 | `COMPANY_NAME` | `Sri Balaji Gears` | Company display name used in automated email templates |
 | `ADMIN_USERNAME` | `admin` | Admin dashboard login username |
 | `ADMIN_PASSWORD` | *(Strong custom password)* | Admin dashboard login password |
@@ -83,22 +83,22 @@ Configure these variables in Render under **Environment** (or in a `.env` file f
 | `SMTP_ENABLED` | `true` (or `false`) | Set to `true` to deliver via direct SMTP server |
 | `SMTP_HOST` | `smtp.rediffmailpro.com` (Rediffmail Pro) | Outgoing SMTP server hostname |
 | `SMTP_PORT` | `465` (SSL) | SMTP port |
-| `SMTP_USER` | `erp@sribalajigears.com` | SMTP authentication username / account |
+| `SMTP_USER` | `erp@sribalajigears.in` | SMTP authentication username / account |
 | `SMTP_PASS` | *(Rediffmail Pro Password)* | SMTP authentication password (never commit to git) |
 | `SMTP_SECURE` | `ssl` | Transport encryption protocol |
-| `SMTP_FROM_EMAIL` | `erp@sribalajigears.com` | From email header for notifications |
+| `SMTP_FROM_EMAIL` | `erp@sribalajigears.in` | From email header for notifications |
 | `SMTP_FROM_NAME` | `Sri Balaji Gears RFQ Portal` | Sender display name |
 
 ---
 
-## 5. Custom Domain & DNS Configuration (`sribalajigears.com`)
+## 5. Custom Domain & DNS Configuration (`sribalajigears.in`)
 
 Render automatically manages free Let's Encrypt SSL/TLS certificates and renews them before expiration.
 
 ### Step 1: Add Custom Domains in Render
 1. Open your service in the Render Dashboard.
 2. Go to **Settings** -> **Custom Domains**.
-3. Add `sribalajigears.com` and `www.sribalajigears.com`.
+3. Add `sribalajigears.in` and `www.sribalajigears.in`.
 
 ### Step 2: Configure DNS Records at Your Registrar (GoDaddy, Namecheap, Cloudflare, etc.)
 
@@ -142,14 +142,14 @@ If deploying to a traditional web host instead of Render:
 
 ## 8. Post-Deployment Verification Checklist
 
-- [ ] **Home Page**: Open `https://www.sribalajigears.com/` and confirm dark-gold styling, logos, and sticky header.
+- [ ] **Home Page**: Open `https://www.sribalajigears.in/` and confirm dark-gold styling, logos, and sticky header.
 - [ ] **Navigation**: Verify all 9 pages load cleanly without 404 errors.
 - [ ] **RFQ Submission**:
   - Visit `/contact.html`.
   - Submit a test RFQ with a sample drawing (`.pdf` or `.step`).
   - Confirm instant green success badge with Reference ID (`SBG-RFQ-YYYYMMDD-XXXX`).
 - [ ] **Admin Portal**:
-  - Open `https://www.sribalajigears.com/admin/login.php`.
+  - Open `https://www.sribalajigears.in/admin/login.php`.
   - Log in with configured `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
   - Confirm the test enquiry appears in the table with contact info and timestamp.
   - Download the test attachment to verify file integrity.

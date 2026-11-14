@@ -196,7 +196,7 @@ try {
 
     // 6. Send Emails
     $destEmail = config('ERP_EMAIL', 'prabhu@sribalajigears.com');
-    $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.com'), '/');
+    $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.in'), '/');
     $attachmentAbsPath = $hasAttachment ? dirname(__DIR__) . '/' . $attachmentPath : null;
 
     // Send Notification Email to Prabhu / ERP desk

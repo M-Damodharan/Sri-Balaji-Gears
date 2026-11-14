@@ -13,7 +13,7 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_URL
-        value: https://www.sribalajigears.com
+        value: https://www.sribalajigears.in
       - key: ERP_EMAIL
         value: erp@sribalajigears.com
       - key: COMPANY_NAME

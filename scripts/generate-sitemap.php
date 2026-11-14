@@ -3,7 +3,7 @@
  * Automated PHP Sitemap Generator for Sri Balaji Gears
  */
 
-$baseUrl = 'https://www.sribalajigears.com';
+$baseUrl = 'https://www.sribalajigears.in';
 
 $pages = [
     'index.html'          => ['loc' => $baseUrl . '/',                    'priority' => '1.0', 'changefreq' => 'weekly'],

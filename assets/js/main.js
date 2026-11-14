@@ -387,7 +387,7 @@
 
       // Resolve endpoint dynamically: on GitHub Pages static preview, attempt production backend
       const isGitHubPages = window.location.hostname.endsWith('github.io');
-      let primaryEndpoint = isGitHubPages ? 'https://www.sribalajigears.com/api/enquiry.php' : 'api/enquiry.php';
+      let primaryEndpoint = isGitHubPages ? 'https://www.sribalajigears.in/api/enquiry.php' : 'api/enquiry.php';
 
       try {
         let response = null;

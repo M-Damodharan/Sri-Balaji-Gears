@@ -7,7 +7,7 @@ import os
 import glob
 from datetime import datetime, timezone
 
-BASE_URL = "https://www.sribalajigears.com"
+BASE_URL = "https://www.sribalajigears.in"
 
 # Priority and changefreq rules
 PAGE_CONFIG = {
