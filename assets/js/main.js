@@ -385,18 +385,40 @@
       const quantity = formData.get('quantity') || 'Not specified';
       const message = formData.get('message') || '';
 
+      // Resolve endpoint dynamically: on GitHub Pages static preview, attempt production backend
+      const isGitHubPages = window.location.hostname.endsWith('github.io');
+      let primaryEndpoint = isGitHubPages ? 'https://www.sribalajigears.com/api/enquiry.php' : 'api/enquiry.php';
+
       try {
-        const response = await fetch('api/enquiry.php', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+        let response = null;
+        let data = null;
+
+        try {
+          response = await fetch(primaryEndpoint, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
+          data = await response.json().catch(() => null);
+        } catch (fetchErr) {
+          // If cross-origin to production backend failed, attempt local relative endpoint
+          if (primaryEndpoint !== 'api/enquiry.php') {
+            try {
+              response = await fetch('api/enquiry.php', {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+              });
+              data = await response.json().catch(() => null);
+            } catch (fallbackErr) {
+              // Both endpoints unreachable
+            }
           }
-        });
+        }
 
-        const data = await response.json().catch(() => null);
-
-        if (response.ok && data && data.success) {
+        if (response && response.ok && data && data.success) {
           if (statusEl) {
             statusEl.className = 'form-status success';
             statusEl.innerHTML = `
@@ -426,15 +448,23 @@
             if (btnIcon) btnIcon.textContent = '✓';
           }
         } else {
-          // Server returned an error message
-          const errMsg = (data && data.error) ? data.error : 'Server could not process your submission. Please check your fields and try again.';
+          // Server returned an error or static host returned 405/404
+          let errMsg;
+          if (data && data.error) {
+            errMsg = data.error;
+          } else if (isGitHubPages || (response && (response.status === 405 || response.status === 404))) {
+            errMsg = 'GitHub Pages is a static preview host and cannot execute PHP scripts. Tap the button below to send your enquiry directly via your email client.';
+          } else {
+            errMsg = 'Server could not process your submission. Please check your fields and try again.';
+          }
           renderErrorWithFallback(errMsg);
         }
       } catch (err) {
         // Network failure or static environment fallback
-        renderErrorWithFallback(
-          'Network or server gateway did not respond. You can immediately launch your email client with your pre-filled inquiry.'
-        );
+        const errMsg = isGitHubPages
+          ? 'GitHub Pages is a static preview host and cannot execute PHP scripts. Tap the button below to send your enquiry directly via your email client.'
+          : 'Network or server gateway did not respond. You can immediately launch your email client with your pre-filled inquiry.';
+        renderErrorWithFallback(errMsg);
       }
 
       function renderErrorWithFallback(msg) {
@@ -444,36 +474,42 @@
           if (btnIcon) btnIcon.textContent = origIcon;
         }
 
+        const drawingFile = formData.get('drawing');
+        const fileInfo = (drawingFile && drawingFile.name && drawingFile.size > 0)
+          ? `Attached Drawing: ${drawingFile.name} (${(drawingFile.size / 1024).toFixed(1)} KB)`
+          : 'Attached Drawing: None';
+
         const mailSubject = encodeURIComponent(`Automotive RFQ: ${projectType} - ${name} (${company || 'New Inquiry'})`);
         const mailBody = encodeURIComponent([
           `AUTOMOTIVE RFQ / SPECIFICATION INQUIRY`,
           `=========================================`,
-          `Contact Name:  ${name}`,
-          `Company:       ${company}`,
-          `Email:         ${email}`,
-          `Phone:         ${phone}`,
-          `Project Focus: ${projectType}`,
-          `Est. Volume:   ${quantity}`,
+          `Contact Name:     ${name}`,
+          `Company:          ${company}`,
+          `Email:            ${email}`,
+          `Phone:            ${phone}`,
+          `Project Focus:    ${projectType}`,
+          `Est. Volume:      ${quantity}`,
+          `${fileInfo}`,
           `-----------------------------------------`,
           `Requirement & Specifications:`,
           message,
           `=========================================`,
-          `Target Recipient: prabhu@sribalajigears.com`
+          `Deliver To: prabhu@sribalajigears.com, erp@sribalajigears.com`
         ].join('\n'));
 
         if (statusEl) {
           statusEl.className = 'form-status error';
           statusEl.style.display = 'block';
           statusEl.innerHTML = `
-            <div style="font-weight:700; margin-bottom:6px; color:#f87171;">⚠️ Notice: ${escapeHtml(msg)}</div>
+            <div style="font-weight:700; margin-bottom:6px; color:#f87171;">⚠️ ${escapeHtml(msg)}</div>
             <div style="margin-top:10px;">
-              <a href="mailto:prabhu@sribalajigears.com?subject=${mailSubject}&body=${mailBody}" class="button sm" style="text-decoration:none; display:inline-flex;">
-                TRANSMIT DIRECTLY VIA EMAIL CLIENT ↗
+              <a href="mailto:prabhu@sribalajigears.com?cc=erp@sribalajigears.com&subject=${mailSubject}&body=${mailBody}" class="button sm" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                ✉️ TRANSMIT DIRECTLY VIA EMAIL CLIENT ↗
               </a>
             </div>
           `;
         }
-        showToast('Submission error. Direct email button available below.', '⚠️');
+        showToast(isGitHubPages ? 'Static preview: launch email client below.' : 'Submission error. Direct email button available below.', '⚠️');
       }
 
       function escapeHtml(str) {
