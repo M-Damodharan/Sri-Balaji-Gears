@@ -6,10 +6,43 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Contact Sri Balaji Gears - Submit automotive RFQs for bus seat frame welding, auto chassis welding, and pressing in SIPCOT Hosur, Tamil Nadu. +91 87782 78761.">
+  <meta name="keywords" content="Sri Balaji Gears contact, RFQ automotive welding, bus seat frame Hosur, auto welding quotation, SIPCOT Hosur manufacturing">
   <meta name="theme-color" content="#07111e">
+  <meta name="google-site-verification" content="GSC_VERIFICATION_TOKEN_PLACEHOLDER">
+  <link rel="canonical" href="https://www.sribalajigears.in/contact.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sri Balaji Gears">
+  <meta property="og:title" content="Contact &amp; RFQ Portal | Sri Balaji Gears Hosur">
+  <meta property="og:description" content="Submit technical 2D/3D drawings and RFQs directly to Sri Balaji Gears ERP engineering desk. Fast turnaround for automotive seating and chassis assemblies.">
+  <meta property="og:url" content="https://www.sribalajigears.in/contact.html">
+  <meta property="og:image" content="https://www.sribalajigears.in/assets/img/sbg-mark.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact &amp; RFQ Portal | Sri Balaji Gears">
+  <meta name="twitter:description" content="Connect with Sri Balaji Gears in SIPCOT Hosur. Submit RFQs for bus passenger seat frames and automotive assemblies.">
   <title>Contact &amp; RFQ Portal | Sri Balaji Gears Hosur</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/sbg-mark.svg">
-  <link rel="stylesheet" href="assets/css/style.css?v=16">
+  <link rel="stylesheet" href="assets/css/style.css?v=17">
+  <!-- Structured Data: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.sribalajigears.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Contact & RFQ",
+        "item": "https://www.sribalajigears.in/contact.html"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -168,14 +201,20 @@
         </div>
 
         <!-- Interactive RFQ Submission Form -->
-        <form class="form reveal delay-2" id="enquiry">
+        <form class="form reveal delay-2" id="enquiry" enctype="multipart/form-data" method="POST">
           <div class="pill-badge" style="margin-bottom: 12px;">
-            <span class="dot"></span> EXPEDITED OEM INQUIRY
+            <span class="dot"></span> DIRECT ERP TRANSMISSION
           </div>
           <h3>Submit an RFQ / Drawing Inquiry</h3>
           <p class="form-subtitle">
-            Fill in your component details below. Submitting will prepare a clean, formatted inquiry email pre-addressed to our ERP team.
+            Submit your component drawings and specifications. Every submission is immediately routed to <strong style="color:var(--gold-300);">erp@sribalajigears.com</strong> and logged with an instant Reference ID.
           </p>
+
+          <!-- Anti-Spam Honeypot Field (Invisible to legitimate users) -->
+          <div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+            <label for="website_hp">Do not fill this field</label>
+            <input type="text" id="website_hp" name="website_hp" tabindex="-1" autocomplete="off">
+          </div>
 
           <div class="formrow">
             <div class="form-group">
@@ -253,14 +292,25 @@
             <textarea id="message" name="message" placeholder="Provide component specifications, tube diameter, wall thickness, material grade, or project requirements..." required></textarea>
           </div>
 
-          <div class="form-footer">
-            <button type="submit" class="button lg">
-              PREPARE &amp; TRANSMIT RFQ <span class="button-icon">↗</span>
-            </button>
-            <span class="note">Opens pre-filled draft in your default email application.</span>
+          <!-- Drawing & Specification File Upload -->
+          <div class="form-group">
+            <label for="attachment">CAD Drawings / Technical Specifications <span style="font-weight:normal; font-size:0.78rem; color:var(--ink-dim);">(Optional · Max 15MB)</span></label>
+            <div class="file-upload-box">
+              <input type="file" id="attachment" name="attachment" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip,.dxf,.dwg,.step,.stp,.iges,.igs">
+              <div class="file-help-text">
+                📎 Formats: 2D/3D CAD (DWG, DXF, STEP, STP, IGES), PDF, Excel, Word, ZIP, Images
+              </div>
+            </div>
           </div>
 
-          <div id="status" class="form-status"></div>
+          <div class="form-footer">
+            <button type="submit" id="submitBtn" class="button lg">
+              <span id="btnText">SUBMIT ENQUIRY / RFQ</span> <span class="button-icon" id="btnIcon">↗</span>
+            </button>
+            <span class="note" id="rfqNote">⚡ Direct transmission to erp@sribalajigears.com · 24–48h OEM response</span>
+          </div>
+
+          <div id="status" class="form-status" role="alert" aria-live="polite"></div>
         </form>
       </div>
     </section>
@@ -398,6 +448,6 @@
     </button>
   </div>
 
-  <script src="assets/js/main.js?v=16?v=8" defer></script>
+  <script src="assets/js/main.js?v=17" defer></script>
 </body>
 </html>

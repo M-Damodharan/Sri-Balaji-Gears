@@ -346,11 +346,32 @@
     });
   }
 
-  // 13. Contact & RFQ Form Handler
+  // 13. Contact & RFQ Form Handler (Direct ERP Backend Transmission)
   const enquiryForm = document.getElementById('enquiry');
   if (enquiryForm) {
-    enquiryForm.addEventListener('submit', (e) => {
+    enquiryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnIcon = document.getElementById('btnIcon');
+      const statusEl = document.getElementById('status');
+
+      // Preserve original button text
+      const origText = btnText ? btnText.textContent : 'SUBMIT ENQUIRY / RFQ';
+      const origIcon = btnIcon ? btnIcon.textContent : '↗';
+
+      // Set loading state
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.textContent = 'TRANSMITTING RFQ...';
+      if (btnIcon) btnIcon.textContent = '⏳';
+
+      if (statusEl) {
+        statusEl.className = 'form-status info';
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; attachments to <strong>erp@sribalajigears.com</strong>...`;
+      }
+
       const formData = new FormData(enquiryForm);
       const name = formData.get('name') || '';
       const company = formData.get('company') || '';
@@ -364,36 +385,104 @@
       const quantity = formData.get('quantity') || 'Not specified';
       const message = formData.get('message') || '';
 
-      const bodyText = [
-        `NEW AUTOMOTIVE RFQ / ENQUIRY`,
-        `==================================`,
-        `Contact Name:  ${name}`,
-        `Company:       ${company}`,
-        `Email:         ${email}`,
-        `Phone:         ${phone}`,
-        `Project Focus: ${projectType}`,
-        `Est. Volume:   ${quantity}`,
-        `----------------------------------`,
-        `Requirement & Specifications:`,
-        message,
-        `==================================`,
-        `Sent via Sri Balaji Gears Website RFQ Portal`
-      ].join('\n');
+      try {
+        const response = await fetch('api/enquiry.php', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
 
-      const subject = encodeURIComponent(`Automotive RFQ: ${projectType} - ${name} (${company || 'New Inquiry'})`);
-      const body = encodeURIComponent(bodyText);
+        const data = await response.json().catch(() => null);
 
-      const statusEl = document.getElementById('status');
-      if (statusEl) {
-        statusEl.className = 'form-status success';
-        statusEl.innerHTML = `✓ Preparing your RFQ email to <strong>erp@sribalajigears.com</strong>. Your mail client will open momentarily.`;
+        if (response.ok && data && data.success) {
+          if (statusEl) {
+            statusEl.className = 'form-status success';
+            statusEl.innerHTML = `
+              <div class="rfq-success-head">
+                <span class="rfq-check-badge">✓</span>
+                <div>
+                  <h4 style="margin:0 0 4px 0; color:#34d399; font-size:1.05rem;">RFQ TRANSMITTED SUCCESSFULLY</h4>
+                  <div class="rfq-ref-id">Reference ID: <strong>${data.reference_id}</strong></div>
+                </div>
+              </div>
+              <p class="rfq-success-msg">
+                Your enquiry and specifications have been automatically delivered to <strong>erp@sribalajigears.com</strong> and permanently archived for plant review. A formal confirmation receipt has been sent to <strong>${escapeHtml(email)}</strong>.
+              </p>
+              <div class="rfq-success-footer">
+                <span class="rfq-meta">⚡ Engineering Review Turnaround: 24–48 Hours</span>
+                <button type="button" class="btn-reset-form" onclick="location.reload()">Submit Another Drawing</button>
+              </div>
+            `;
+          }
+
+          showToast(`RFQ Transmitted! Ref: ${data.reference_id}`, '✓');
+          enquiryForm.reset();
+
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            if (btnText) btnText.textContent = 'TRANSMISSION COMPLETE';
+            if (btnIcon) btnIcon.textContent = '✓';
+          }
+        } else {
+          // Server returned an error message
+          const errMsg = (data && data.error) ? data.error : 'Server could not process your submission. Please check your fields and try again.';
+          renderErrorWithFallback(errMsg);
+        }
+      } catch (err) {
+        // Network failure or static environment fallback
+        renderErrorWithFallback(
+          'Network or server gateway did not respond. You can immediately launch your email client with your pre-filled inquiry.'
+        );
       }
 
-      showToast('Opening your email client to send RFQ...', '✉️');
+      function renderErrorWithFallback(msg) {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          if (btnText) btnText.textContent = origText;
+          if (btnIcon) btnIcon.textContent = origIcon;
+        }
 
-      setTimeout(() => {
-        window.location.href = `mailto:erp@sribalajigears.com?subject=${subject}&body=${body}`;
-      }, 700);
+        const mailSubject = encodeURIComponent(`Automotive RFQ: ${projectType} - ${name} (${company || 'New Inquiry'})`);
+        const mailBody = encodeURIComponent([
+          `AUTOMOTIVE RFQ / SPECIFICATION INQUIRY`,
+          `=========================================`,
+          `Contact Name:  ${name}`,
+          `Company:       ${company}`,
+          `Email:         ${email}`,
+          `Phone:         ${phone}`,
+          `Project Focus: ${projectType}`,
+          `Est. Volume:   ${quantity}`,
+          `-----------------------------------------`,
+          `Requirement & Specifications:`,
+          message,
+          `=========================================`,
+          `Target Recipient: erp@sribalajigears.com`
+        ].join('\n'));
+
+        if (statusEl) {
+          statusEl.className = 'form-status error';
+          statusEl.style.display = 'block';
+          statusEl.innerHTML = `
+            <div style="font-weight:700; margin-bottom:6px; color:#f87171;">⚠️ Notice: ${escapeHtml(msg)}</div>
+            <div style="margin-top:10px;">
+              <a href="mailto:erp@sribalajigears.com?subject=${mailSubject}&body=${mailBody}" class="button sm" style="text-decoration:none; display:inline-flex;">
+                TRANSMIT DIRECTLY VIA EMAIL CLIENT ↗
+              </a>
+            </div>
+          `;
+        }
+        showToast('Submission error. Direct email button available below.', '⚠️');
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
     });
   }
 

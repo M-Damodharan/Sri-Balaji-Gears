@@ -9,3 +9,15 @@ Thumbs.db
 
 # Zip uploads
 *.zip
+
+# Environment & Secrets
+.env
+
+# Database & Uploads
+data/*.db
+data/*.sqlite
+uploads/*
+!uploads/.htaccess
+!uploads/.gitkeep
+!data/.htaccess
+!data/.gitkeep

@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Disallow: /data/
+Disallow: /uploads/
 
 Sitemap: https://www.sribalajigears.in/sitemap.xml
