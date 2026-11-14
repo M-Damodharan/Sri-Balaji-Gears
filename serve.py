@@ -106,30 +106,171 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         msg["Reply-To"] = f"{name} <{email}>"
         msg["Subject"] = f"New Automotive RFQ [{ref_id}] - {company} ({cat_display})"
 
-        html_body = f"""
-        <html>
-        <body style="font-family:Arial,sans-serif; background:#f4f6f9; padding:20px;">
-          <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:8px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="background:#07111e; padding:20px; border-bottom:3px solid #efad2d; color:#ffffff;">
-              <h2 style="margin:0; color:#efad2d; font-size:20px;">SRI BALAJI GEARS - RFQ INQUIRY</h2>
-              <p style="margin:4px 0 0; color:#94a3b8; font-size:12px;">Automated RFQ Notification</p>
-            </div>
-            <div style="padding:24px;">
-              <p><strong>Reference ID:</strong> {ref_id}</p>
-              <p><strong>Contact Person:</strong> {name}</p>
-              <p><strong>Company / OEM:</strong> {company}</p>
-              <p><strong>Email:</strong> <a href="mailto:{email}">{email}</a></p>
-              <p><strong>Phone:</strong> <a href="tel:{phone}">{phone}</a></p>
-              <p><strong>Requirement:</strong> {cat_display}</p>
-              <p><strong>Estimated Volume:</strong> {quantity}</p>
-              <p><strong>Attachment:</strong> {att_name or 'None provided'}</p>
-              <hr style="border:0; border-top:1px solid #e2e8f0; margin:16px 0;">
-              <p><strong>Specifications & Requirements:</strong></p>
-              <div style="background:#f8fafc; padding:12px; border-left:4px solid #efad2d; border-radius:4px; white-space:pre-wrap;">{message}</div>
-            </div>
+        app_url = get_env("APP_URL", "https://www.sribalajigears.com").rstrip("/")
+        att_display = f"<strong style='color:#059669;'>✓ {att_name}</strong> (Securely attached below)" if att_name else "<span style='color:#94a3b8;'>No attachment submitted</span>"
+
+        html_body = f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>New Automotive RFQ [{ref_id}]</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0b1320; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#1e293b; -webkit-font-smoothing:antialiased;">
+  <center style="width:100%; background-color:#0b1320; padding:24px 0;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:650px; background-color:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 10px 25px rgba(0,0,0,0.3); border:1px solid #1e293b;">
+      
+      <!-- Top Gold Accent Line -->
+      <tr>
+        <td height="4" style="background:linear-gradient(90deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%); line-height:4px; font-size:4px;">&nbsp;</td>
+      </tr>
+
+      <!-- Corporate Header -->
+      <tr>
+        <td style="background-color:#07111e; padding:24px 28px; border-bottom:2px solid #efad2d;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td valign="middle">
+                <div style="font-size:22px; font-weight:800; color:#ffffff; letter-spacing:0.04em;">
+                  SRI BALAJI <span style="color:#efad2d;">GEARS</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-top:4px;">
+                  Tier-1 Automotive Seating &amp; Chassis Welded Assemblies · Hosur
+                </div>
+              </td>
+              <td align="right" valign="middle">
+                <span style="display:inline-block; padding:6px 12px; background:rgba(239, 173, 45, 0.15); border:1px solid #efad2d; border-radius:20px; color:#fbbf24; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;">
+                  ⚡ NEW RFQ INQUIRY
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Subheader with Reference ID & Timestamp -->
+      <tr>
+        <td style="background-color:#f8fafc; padding:16px 28px; border-bottom:1px solid #e2e8f0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td>
+                <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Tracking Reference ID</div>
+                <div style="font-size:16px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:3px;">
+                  <span style="background:#fef3c7; color:#92400e; padding:3px 8px; border-radius:4px; border:1px solid #fde68a;">{ref_id}</span>
+                </div>
+              </td>
+              <td align="right">
+                <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Received Timestamp</div>
+                <div style="font-size:13px; font-weight:600; color:#334155; margin-top:3px;">
+                  {datetime.now().strftime('%d %b %Y · %I:%M %p IST')}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Main Body Content -->
+      <tr>
+        <td style="padding:26px 28px;">
+          
+          <div style="font-size:12px; font-weight:700; color:#07111e; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">
+            📋 Customer &amp; Component Parameters
           </div>
-        </body>
-        </html>
+
+          <!-- Parameters Table -->
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse; margin-bottom:22px; font-size:14px;">
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; width:34%; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">👤 Contact Person</td>
+              <td style="padding:10px 14px; width:66%; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{name}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">🏢 Company / OEM</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{company}</td>
+            </tr>
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">✉️ Corporate Email</td>
+              <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0;">
+                <a href="mailto:{email}" style="color:#2563eb; text-decoration:none; font-weight:600;">{email}</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">📞 Phone / Mobile</td>
+              <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0;">
+                <a href="tel:{phone}" style="color:#0f172a; text-decoration:none; font-weight:700;">{phone}</a>
+              </td>
+            </tr>
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">🎯 Requirement Focus</td>
+              <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0;">
+                <span style="display:inline-block; padding:3px 10px; background:#e0f2fe; color:#0369a1; border-radius:4px; font-weight:700; font-size:13px;">
+                  {cat_display}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">📊 Estimated Volume</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{quantity}</td>
+            </tr>
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">📎 Technical Drawing</td>
+              <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0;">{att_display}</td>
+            </tr>
+          </table>
+
+          <!-- Component Details & Technical Notes Box -->
+          <div style="font-size:12px; font-weight:700; color:#07111e; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">
+            📝 Technical Specifications &amp; Inquiry Notes:
+          </div>
+          <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #efad2d; border-radius:6px; padding:16px 18px; font-size:14px; line-height:1.6; color:#1e293b; white-space:pre-wrap; margin-bottom:22px;">{message}</div>
+
+          <!-- Quick Action Buttons for ERP Engineering Team -->
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px;">
+            <tr>
+              <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="border-radius:6px; background-color:#07111e;">
+                      <a href="mailto:{email}?subject=RE:%20Sri%20Balaji%20Gears%20RFQ%20[{ref_id}]" target="_blank" style="display:inline-block; padding:11px 20px; font-size:12px; font-weight:700; color:#efad2d; text-decoration:none; border-radius:6px; letter-spacing:0.04em; text-transform:uppercase; border:1px solid #efad2d;">
+                        ↩ Reply to Customer
+                      </a>
+                    </td>
+                    <td width="10">&nbsp;</td>
+                    <td style="border-radius:6px; background-color:#10b981;">
+                      <a href="tel:{phone}" target="_blank" style="display:inline-block; padding:11px 20px; font-size:12px; font-weight:700; color:#ffffff; text-decoration:none; border-radius:6px; letter-spacing:0.04em; text-transform:uppercase;">
+                        📞 Call Customer
+                      </a>
+                    </td>
+                    <td width="10">&nbsp;</td>
+                    <td style="border-radius:6px; background-color:#f1f5f9; border:1px solid #cbd5e1;">
+                      <a href="{app_url}/admin/index.php" target="_blank" style="display:inline-block; padding:11px 18px; font-size:12px; font-weight:700; color:#334155; text-decoration:none; border-radius:6px; letter-spacing:0.04em; text-transform:uppercase;">
+                        🛡️ Admin Portal
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+
+      <!-- Corporate Footer -->
+      <tr>
+        <td style="background-color:#07111e; padding:20px 28px; border-top:1px solid #1e293b; color:#94a3b8; font-size:12px; line-height:1.6; text-align:center;">
+          <div style="font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;">SRI BALAJI GEARS</div>
+          <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
+          <div style="color:#64748b; font-size:11px; margin-top:5px;">
+            IATF 16949 Aligned · ISO 9001:2015 · Automated ERP Web Transmission System
+          </div>
+        </td>
+      </tr>
+
+    </table>
+  </center>
+</body>
+</html>
         """
         msg.attach(MIMEText(html_body, "html", "utf-8"))
 
@@ -164,21 +305,103 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         cust_msg["To"] = email
         cust_msg["Subject"] = f"RFQ Confirmation [{ref_id}] - Sri Balaji Gears"
 
-        cust_html = f"""
-        <html>
-        <body style="font-family:Arial,sans-serif; background:#f4f6f9; padding:20px;">
-          <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:8px; border:1px solid #e2e8f0; padding:24px;">
-            <h2 style="color:#07111e; margin-top:0;">SRI BALAJI GEARS</h2>
-            <p>Dear <strong>{name}</strong>,</p>
-            <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong>.</p>
-            <p>Your inquiry has been registered with reference ID: <strong>{ref_id}</strong>.</p>
-            <p>Our engineering team in SIPCOT Hosur will review your drawings and respond within 24–48 hours.</p>
-            <br>
-            <p>Best regards,<br><strong>Sri Balaji Gears Team</strong><br>SIPCOT Phase I, Hosur, Tamil Nadu</p>
+        cust_html = f"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RFQ Confirmation [{ref_id}] - Sri Balaji Gears</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0b1320; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#1e293b; -webkit-font-smoothing:antialiased;">
+  <center style="width:100%; background-color:#0b1320; padding:24px 0;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:620px; background-color:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 10px 25px rgba(0,0,0,0.3); border:1px solid #1e293b;">
+      
+      <!-- Top Gold Accent Line -->
+      <tr>
+        <td height="4" style="background:linear-gradient(90deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%); line-height:4px; font-size:4px;">&nbsp;</td>
+      </tr>
+
+      <!-- Corporate Header -->
+      <tr>
+        <td style="background-color:#07111e; padding:24px 28px; border-bottom:2px solid #efad2d;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td valign="middle">
+                <div style="font-size:22px; font-weight:800; color:#ffffff; letter-spacing:0.04em;">
+                  SRI BALAJI <span style="color:#efad2d;">GEARS</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-top:4px;">
+                  Tier-1 Automotive Seating &amp; Chassis Welded Assemblies · Hosur
+                </div>
+              </td>
+              <td align="right" valign="middle">
+                <span style="display:inline-block; padding:6px 12px; background:rgba(16, 185, 129, 0.15); border:1px solid #10b981; border-radius:20px; color:#34d399; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;">
+                  ✓ INQUIRY RECEIVED
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Body Content -->
+      <tr>
+        <td style="padding:28px 28px; font-size:14px; line-height:1.6;">
+          
+          <p style="margin-top:0;">Dear <strong>{name}</strong>,</p>
+          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong> through the official Sri Balaji Gears engineering portal.</p>
+          <p>Our production planning and tool engineering team in SIPCOT Hosur has received your technical specifications:</p>
+
+          <!-- Reference ID Box -->
+          <div style="background-color:#f8fafc; border:1px dashed #cbd5e1; border-radius:6px; padding:14px 18px; margin:18px 0; text-align:center;">
+            <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Official Tracking Reference ID</div>
+            <div style="font-size:18px; font-weight:800; color:#0f172a; font-family:ui-monospace, monospace; margin-top:4px;">
+              <span style="background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:4px; border:1px solid #fde68a;">{ref_id}</span>
+            </div>
           </div>
-        </body>
-        </html>
-        """
+
+          <!-- Parameter Summary Table -->
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse; margin-bottom:20px; font-size:13px; border:1px solid #e2e8f0; border-radius:6px;">
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; width:38%; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">🎯 Requirement Category</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{cat_display}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 14px; font-weight:600; color:#475569; border-bottom:1px solid #e2e8f0;">📊 Estimated Monthly Volume</td>
+              <td style="padding:10px 14px; font-weight:700; color:#0f172a; border-bottom:1px solid #e2e8f0;">{quantity}</td>
+            </tr>
+            <tr style="background-color:#f8fafc;">
+              <td style="padding:10px 14px; font-weight:600; color:#475569;">⚡ Target Turnaround SLA</td>
+              <td style="padding:10px 14px; font-weight:700; color:#d97706;">Technical review &amp; quote within 24–48 hours</td>
+            </tr>
+          </table>
+
+          <p>An application engineer has been assigned to inspect your component parameters and CAD drawings. We will reach out directly to <strong>{email}</strong> or <strong>{phone}</strong> with our technical appraisal and commercial estimate.</p>
+
+          <p style="margin-top:24px; margin-bottom:0;">Warm regards,<br>
+            <strong>Technical Sales &amp; ERP Engineering Team</strong><br>
+            <span style="color:#64748b; font-size:13px;">Sri Balaji Gears · SIPCOT Hosur</span>
+          </p>
+
+        </td>
+      </tr>
+
+      <!-- Corporate Footer -->
+      <tr>
+        <td style="background-color:#07111e; padding:20px 28px; border-top:1px solid #1e293b; color:#94a3b8; font-size:12px; line-height:1.6; text-align:center;">
+          <div style="font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;">SRI BALAJI GEARS</div>
+          <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
+          <div style="margin-top:4px;">
+            <strong>Hotline:</strong> <a href="tel:+918778278761" style="color:#efad2d; text-decoration:none;">+91 87782 78761</a> &middot; 
+            <strong>Email:</strong> <a href="mailto:erp@sribalajigears.com" style="color:#efad2d; text-decoration:none;">erp@sribalajigears.com</a>
+          </div>
+        </td>
+      </tr>
+
+    </table>
+  </center>
+</body>
+</html>"""
         cust_msg.attach(MIMEText(cust_html, "html", "utf-8"))
         server.sendmail(from_email, [email], cust_msg.as_string())
         print(f"[SUCCESS] Customer confirmation sent to {email}")
