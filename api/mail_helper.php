@@ -402,10 +402,102 @@ function sendCustomerConfirmationEmail($to, $name, $company, $phone, $refId, $ca
  * Universal MIME multipart mail sender
  */
 function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $replyToName = null, $attName = null, $attPath = null) {
-    // 0. Primary: Secure HTTPS Email Relay (Port 443 - Bypasses Render cloud SMTP port blocking)
+    $fromEmail = 'erp@sribalajigears.com';
+    $fromName = 'Sri Balaji Gears';
+
+    // 0A. Brevo (Sendinblue) HTTPS API (Port 443 - 300 free emails/day directly from erp@sribalajigears.com)
+    $brevoKey = config('BREVO_API_KEY');
+    if ($brevoKey) {
+        $toRecipients = is_array($to) ? $to : explode(',', $to);
+        $toPayload = [];
+        foreach ($toRecipients as $t) {
+            $t = trim($t);
+            if ($t) $toPayload[] = ['email' => $t];
+        }
+
+        $brevoData = [
+            'sender' => ['name' => $fromName, 'email' => $fromEmail],
+            'to' => $toPayload,
+            'subject' => $subject,
+            'htmlContent' => $htmlContent,
+            'replyTo' => ['email' => $replyToEmail ?: $fromEmail, 'name' => $replyToName ?: $fromName]
+        ];
+
+        if ($attName && $attPath && file_exists($attPath)) {
+            $brevoData['attachment'] = [[
+                'name' => basename($attName),
+                'content' => base64_encode(file_get_contents($attPath))
+            ]];
+        }
+
+        $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($brevoData));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'api-key: ' . $brevoKey,
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        $res = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($code >= 200 && $code < 300) {
+            return true;
+        }
+        error_log("Brevo API returned {$code}: {$res}. Falling back.");
+    }
+
+    // 0B. Direct Socket SMTP Engine (Active on Render Starter or local server)
+    $useDirectSmtp = config('USE_DIRECT_SMTP', 'false');
+    if ($useDirectSmtp === 'true' || $useDirectSmtp === '1' || empty(config('MAIL_RELAY_URL'))) {
+        $smtpHost = config('SMTP_HOST', 'smtp.rediffmailpro.com');
+        $port = (int)config('SMTP_PORT', 465);
+        $user = config('SMTP_USER', 'erp@sribalajigears.com');
+        $pass = config('SMTP_PASS', 'sbgerp@2026');
+        $crypto = strtolower(config('SMTP_SECURE', 'ssl'));
+
+        $boundary = '==Multipart_Boundary_x' . md5(microtime(true) . rand()) . 'x';
+        $headers = [];
+        $headers[] = 'Date: ' . date('r');
+        $headers[] = 'Message-ID: <' . time() . '.' . bin2hex(random_bytes(8)) . '@sribalajigears.in>';
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = "From: {$fromName} <{$fromEmail}>";
+        if ($replyToEmail) {
+            $headers[] = "Reply-To: " . ($replyToName ? "{$replyToName} <{$replyToEmail}>" : $replyToEmail);
+        }
+        $headers[] = 'X-Mailer: SBG-Mailer/1.0';
+        $headers[] = "Content-Type: multipart/mixed; boundary=\"{$boundary}\"";
+
+        $body = "--{$boundary}\r\n";
+        $body .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
+        $body .= chunk_split(base64_encode($htmlContent)) . "\r\n";
+
+        if ($attName && $attPath && file_exists($attPath) && filesize($attPath) < 15 * 1024 * 1024) {
+            $fileData = file_get_contents($attPath);
+            $cleanAttName = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', basename($attName));
+            $body .= "--{$boundary}\r\n";
+            $body .= "Content-Type: application/octet-stream; name=\"{$cleanAttName}\"\r\n";
+            $body .= "Content-Disposition: attachment; filename=\"{$cleanAttName}\"; size=" . strlen($fileData) . ";\r\n";
+            $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
+            $body .= chunk_split(base64_encode($fileData)) . "\r\n";
+        }
+        $body .= "--{$boundary}--";
+
+        $smtpSuccess = sendViaSmtpSocket($to, $subject, $body, $headers, $smtpHost, $port, $user, $pass, $crypto);
+        if ($smtpSuccess) {
+            return true;
+        }
+        error_log("Direct SMTP to {$smtpHost}:{$port} failed. Checking fallback relay.");
+    }
+
+    // 0C. Primary HTTPS Relay
     $defaultRelayUrl = 'https://script.google.com/macros/s/AKfycbzQcQU8m8LGMpnG5IC3A5v_ng-qe_8NZLV26bBaNKEc-9CQQ2TEppmBYGTeE9Baok4/exec';
-    $httpRelayUrl = config('MAIL_RELAY_URL', config('MAIL_WEBHOOK_URL', $defaultRelayUrl));
-    if ($httpRelayUrl) {
+    $httpRelayUrl = config('MAIL_RELAY_URL', $defaultRelayUrl);
+    if ($httpRelayUrl && $useDirectSmtp !== 'true') {
         $relayPayload = [
             'to' => is_array($to) ? implode(', ', $to) : $to,
             'subject' => $subject,
