@@ -245,6 +245,6 @@ try {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'error' => 'An error occurred while processing your request. Please email directly to ' . config('ERP_EMAIL', 'erp@sribalajigears.com')
+        'error' => 'An error occurred while processing your request. Please email directly to erp@sribalajigears.com'
     ]);
 }

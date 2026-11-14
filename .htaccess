@@ -19,7 +19,19 @@ DirectoryIndex index.html
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
 
-# 3. Leverage Browser Caching
+# 3. Cache Control: Never cache HTML to guarantee live updates; revalidate JS
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# 4. Leverage Browser Caching for static assets (images, fonts)
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType image/x-icon "access plus 1 year"
@@ -27,8 +39,6 @@ DirectoryIndex index.html
   ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
-  ExpiresByType text/css "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 

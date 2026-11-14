@@ -395,7 +395,7 @@ function sendCustomerConfirmationEmail($to, $name, $company, $phone, $refId, $ca
 </html>
     ";
 
-    sendMailMultipart($to, $subject, $htmlBody, config('ERP_EMAIL', 'erp@sribalajigears.com'), 'Sri Balaji Gears');
+    sendMailMultipart($to, $subject, $htmlBody, 'erp@sribalajigears.com', 'Sri Balaji Gears');
 }
 
 /**
