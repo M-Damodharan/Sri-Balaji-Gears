@@ -81,11 +81,11 @@ Configure these variables in Render under **Environment** (or in a `.env` file f
 | `ADMIN_PASSWORD` | *(Strong custom password)* | Admin dashboard login password |
 | `MAX_UPLOAD_SIZE_MB` | `15` | Maximum allowed attachment size in Megabytes |
 | `SMTP_ENABLED` | `true` (or `false`) | Set to `true` to deliver via direct SMTP server |
-| `SMTP_HOST` | `smtp.gmail.com` / `mail.sribalajigears.com` | Outgoing SMTP server hostname |
-| `SMTP_PORT` | `587` (TLS) or `465` (SSL) | SMTP port |
-| `SMTP_USER` | `erp@sribalajigears.com` | SMTP authentication username |
-| `SMTP_PASS` | *(App Password / Secret)* | SMTP authentication password (never commit to git) |
-| `SMTP_SECURE` | `tls` or `ssl` | Transport encryption protocol |
+| `SMTP_HOST` | `smtp.rediffmailpro.com` (Rediffmail Pro) | Outgoing SMTP server hostname |
+| `SMTP_PORT` | `465` (SSL) | SMTP port |
+| `SMTP_USER` | `erp@sribalajigears.com` | SMTP authentication username / account |
+| `SMTP_PASS` | `sbgerp@2026` | SMTP authentication password |
+| `SMTP_SECURE` | `ssl` | Transport encryption protocol |
 | `SMTP_FROM_EMAIL` | `erp@sribalajigears.com` | From email header for notifications |
 | `SMTP_FROM_NAME` | `Sri Balaji Gears RFQ Portal` | Sender display name |
 

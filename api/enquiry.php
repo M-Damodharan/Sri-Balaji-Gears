@@ -342,7 +342,7 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
  * Universal MIME multipart mail sender
  */
 function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $replyToName = null, $attName = null, $attPath = null) {
-    $fromEmail = config('SMTP_FROM_EMAIL', config('ERP_EMAIL', 'erp@sribalajigears.com'));
+    $fromEmail = config('SMTP_FROM_EMAIL', config('SMTP_FROM', config('ERP_EMAIL', 'erp@sribalajigears.com')));
     $fromName = config('SMTP_FROM_NAME', 'Sri Balaji Gears');
 
     $boundary = '==Multipart_Boundary_x' . md5(time()) . 'x';
@@ -381,10 +381,10 @@ function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $r
     $smtpHost = config('SMTP_HOST');
     $smtpEnabled = config('SMTP_ENABLED');
     if (($smtpEnabled === 'true' || $smtpEnabled === '1' || !empty($smtpHost)) && !empty($smtpHost)) {
-        $port = (int)config('SMTP_PORT', 587);
-        $user = config('SMTP_USER', '');
-        $pass = config('SMTP_PASS', '');
-        $crypto = strtolower(config('SMTP_ENCRYPTION', config('SMTP_SECURE', 'tls')));
+        $port = (int)config('SMTP_PORT', 465);
+        $user = config('SMTP_USER', config('SMTP_USERNAME', ''));
+        $pass = config('SMTP_PASS', config('SMTP_PASSWORD', ''));
+        $crypto = strtolower(config('SMTP_ENCRYPTION', config('SMTP_SECURE', ($port == 465 ? 'ssl' : 'tls'))));
 
         $smtpSuccess = sendViaSmtpSocket($to, $subject, $body, $headers, $smtpHost, $port, $user, $pass, $crypto);
         if ($smtpSuccess) {
