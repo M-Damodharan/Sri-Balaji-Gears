@@ -369,7 +369,7 @@
       if (statusEl) {
         statusEl.className = 'form-status info';
         statusEl.style.display = 'block';
-        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; attachments to <strong>erp@sribalajigears.com</strong>...`;
+        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; attachments to <strong>prabhu@sribalajigears.com</strong>...`;
       }
 
       const formData = new FormData(enquiryForm);
@@ -408,7 +408,7 @@
                 </div>
               </div>
               <p class="rfq-success-msg">
-                Your enquiry and specifications have been automatically delivered to <strong>erp@sribalajigears.com</strong> and permanently archived for plant review. A formal confirmation receipt has been sent to <strong>${escapeHtml(email)}</strong>.
+                Your enquiry and specifications have been automatically delivered to <strong>prabhu@sribalajigears.com</strong> and permanently archived for plant review. A formal confirmation receipt has been sent to <strong>${escapeHtml(email)}</strong>.
               </p>
               <div class="rfq-success-footer">
                 <span class="rfq-meta">⚡ Engineering Review Turnaround: 24–48 Hours</span>
@@ -458,7 +458,7 @@
           `Requirement & Specifications:`,
           message,
           `=========================================`,
-          `Target Recipient: erp@sribalajigears.com`
+          `Target Recipient: prabhu@sribalajigears.com`
         ].join('\n'));
 
         if (statusEl) {
@@ -467,7 +467,7 @@
           statusEl.innerHTML = `
             <div style="font-weight:700; margin-bottom:6px; color:#f87171;">⚠️ Notice: ${escapeHtml(msg)}</div>
             <div style="margin-top:10px;">
-              <a href="mailto:erp@sribalajigears.com?subject=${mailSubject}&body=${mailBody}" class="button sm" style="text-decoration:none; display:inline-flex;">
+              <a href="mailto:prabhu@sribalajigears.com?subject=${mailSubject}&body=${mailBody}" class="button sm" style="text-decoration:none; display:inline-flex;">
                 TRANSMIT DIRECTLY VIA EMAIL CLIENT ↗
               </a>
             </div>

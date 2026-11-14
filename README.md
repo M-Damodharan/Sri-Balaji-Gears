@@ -11,8 +11,8 @@ A modern, production-grade corporate website and RFQ enquiry management portal f
    - **Interactive Components**: Real-time counter animations, tabbed product portfolio, modal image lightbox for compliance certificates, expandable FAQ accordions, and one-click copy buttons for phone/email/address with toast feedback.
    - **9 Complete Pages**: `index.html` (Home), `about.html`, `manufacturing.html`, `products.html`, `infrastructure.html`, `quality.html`, `certifications.html`, `customers.html` (showcasing UNO MINDA & TVS Motor), and `contact.html`.
 
-2. **Customer Enquiry & ERP Integration (`erp@sribalajigears.com`)**:
-   - **Instant RFQ Submission**: Connects directly to `erp@sribalajigears.com` via backend API (`/api/enquiry.php`).
+2. **Customer Enquiry & ERP Integration (`prabhu@sribalajigears.com`)**:
+   - **Instant RFQ Submission**: Connects directly to `prabhu@sribalajigears.com` via backend API (`/api/enquiry.php`).
    - **Drawing / CAD File Uploads**: Validates and accepts 2D/3D CAD (`.dwg`, `.dxf`, `.step`, `.stp`, `.iges`), `.pdf`, Excel, Word, ZIP, and image specifications up to 15MB.
    - **Dual-Action Delivery**: Sends an HTML notification to the plant ERP desk and a confirmation receipt to the customer.
    - **Tracking Reference**: Automatically issues unique IDs (e.g. `SBG-RFQ-YYYYMMDD-XXXX`).
@@ -44,8 +44,8 @@ A modern, production-grade corporate website and RFQ enquiry management portal f
 - **Campus Area**: 70,000 Sq. Ft. Total Land Area | 50,000 Sq. Ft. Built-up
 - **Location**: SIPCOT Industrial Complex Phase I, Hosur, Tamil Nadu 635126, India
 - **Coordinates**: 12.7409° N, 77.8253° E
-- **Corporate Email**: [erp@sribalajigears.com](mailto:erp@sribalajigears.com)
-- **Plant Hotline**: +91 87782 78761
+- **Corporate Email**: [prabhu@sribalajigears.com](mailto:prabhu@sribalajigears.com)
+- **Plant Hotline**: +91 73733 34411
 - **Domain**: [sribalajigears.com](https://www.sribalajigears.com)
 - **Key OEM Customers**:
   - **UNO MINDA**: Dedicated bus seat frame welding (~90% specialized work focus)

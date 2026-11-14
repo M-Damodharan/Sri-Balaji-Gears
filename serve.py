@@ -295,9 +295,10 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
         if smtp_user and smtp_pass:
             server.login(smtp_user, smtp_pass)
 
-        # Send to ERP Desk
-        server.sendmail(from_email, [erp_target], msg.as_string())
-        print(f"[SUCCESS] RFQ Notification sent to {erp_target}")
+        # Send to Prabhu & ERP Desk
+        all_recipients = list(set([erp_target, "prabhu@sribalajigears.com", "erp@sribalajigears.com"]))
+        server.sendmail(from_email, all_recipients, msg.as_string())
+        print(f"[SUCCESS] RFQ Notification sent to {all_recipients}")
 
         # Send confirmation email to Customer
         cust_msg = MIMEMultipart("alternative")
@@ -392,7 +393,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
           <div style="font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;">SRI BALAJI GEARS</div>
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style="margin-top:4px;">
-            <strong>Hotline:</strong> <a href="tel:+918778278761" style="color:#efad2d; text-decoration:none;">+91 87782 78761</a> &middot; 
+            <strong>Hotline:</strong> <a href="tel:+917373334411" style="color:#efad2d; text-decoration:none;">+91 73733 34411</a> &middot; 
             <strong>Email:</strong> <a href="mailto:erp@sribalajigears.com" style="color:#efad2d; text-decoration:none;">erp@sribalajigears.com</a>
           </div>
         </td>

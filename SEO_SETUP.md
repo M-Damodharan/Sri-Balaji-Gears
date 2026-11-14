@@ -114,7 +114,7 @@ Ensure your Google Business Profile matches the website structured data exactly:
 - **Secondary Categories**: `Welding Supply Store`, `Mechanical Engineer`, `Precision Engineer`
 - **Address**: `SIPCOT Industrial Complex, Phase I, Hosur, Tamil Nadu 635126, India`
 - **Latitude / Longitude**: `12.7409° N, 77.8253° E`
-- **Phone Number**: `+91 87782 78761`
+- **Phone Number**: `+91 73733 34411`
 - **Official Website URL**: `https://www.sribalajigears.com/`
 - **Appointment / RFQ URL**: `https://www.sribalajigears.com/contact.html`
 - **Operating Hours**:

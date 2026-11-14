@@ -186,16 +186,25 @@ try {
     ]);
 
     // 6. Send Emails
-    $destEmail = config('ERP_EMAIL', 'erp@sribalajigears.com');
+    $destEmail = config('ERP_EMAIL', 'prabhu@sribalajigears.com');
     $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.com'), '/');
     $attachmentAbsPath = $hasAttachment ? dirname(__DIR__) . '/' . $attachmentPath : null;
 
-    // Send ERP Notification Email
+    // Send Notification Email to Prabhu / ERP desk
     sendErpNotificationEmail(
         $destEmail, $refId, $name, $company, $email, $phone,
         $projectType, $otherCategory, $quantity, $message,
         $attachmentName, $attachmentAbsPath, $appUrl
     );
+
+    // If configured email is not erp@sribalajigears.com, also copy erp@sribalajigears.com
+    if ($destEmail !== 'erp@sribalajigears.com') {
+        sendErpNotificationEmail(
+            'erp@sribalajigears.com', $refId, $name, $company, $email, $phone,
+            $projectType, $otherCategory, $quantity, $message,
+            $attachmentName, $attachmentAbsPath, $appUrl
+        );
+    }
 
     // Send Customer Acknowledgment Email
     sendCustomerConfirmationEmail(
@@ -490,7 +499,7 @@ function sendCustomerConfirmationEmail($to, $name, $company, $refId, $category, 
           <div style='font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;'>SRI BALAJI GEARS</div>
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style='margin-top:4px;'>
-            <strong>Hotline:</strong> <a href='tel:+918778278761' style='color:#efad2d; text-decoration:none;'>+91 87782 78761</a> &middot; 
+            <strong>Hotline:</strong> <a href='tel:+917373334411' style='color:#efad2d; text-decoration:none;'>+91 73733 34411</a> &middot; 
             <strong>Email:</strong> <a href='mailto:erp@sribalajigears.com' style='color:#efad2d; text-decoration:none;'>erp@sribalajigears.com</a>
           </div>
         </td>
