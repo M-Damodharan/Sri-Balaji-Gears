@@ -1,10 +1,11 @@
 # Sri Balaji Gears - Production Apache / cPanel Configuration
 DirectoryIndex index.html
 
-# 1. Force HTTPS
+# 1. Force HTTPS (Safe behind reverse proxies like Render / Cloudflare)
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Clean URLs (allow opening /about without .html)
