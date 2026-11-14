@@ -491,13 +491,12 @@ function sendMailMultipart($to, $subject, $htmlContent, $replyToEmail = null, $r
         if ($smtpSuccess) {
             return true;
         }
-        error_log("Direct SMTP to {$smtpHost}:{$port} failed. Checking fallback relay.");
+        error_log("Direct SMTP to {$smtpHost}:{$port} failed.");
     }
 
-    // 0C. Primary HTTPS Relay
-    $defaultRelayUrl = 'https://script.google.com/macros/s/AKfycbzQcQU8m8LGMpnG5IC3A5v_ng-qe_8NZLV26bBaNKEc-9CQQ2TEppmBYGTeE9Baok4/exec';
-    $httpRelayUrl = config('MAIL_RELAY_URL', $defaultRelayUrl);
-    if ($httpRelayUrl && $useDirectSmtp !== 'true') {
+    // 0C. Custom Relay (Only if user explicitly provides an external webhook)
+    $httpRelayUrl = config('MAIL_RELAY_URL');
+    if ($httpRelayUrl) {
         $relayPayload = [
             'to' => is_array($to) ? implode(', ', $to) : $to,
             'subject' => $subject,
