@@ -205,15 +205,16 @@ try {
     $appUrl = rtrim(config('APP_URL', 'https://www.sribalajigears.in'), '/');
     $attachmentAbsPath = $hasAttachment ? dirname(__DIR__) . '/' . $attachmentPath : null;
 
-    // Send Notification Email to Prabhu & ERP desk simultaneously in one high-speed connection
-    $plantRecipients = array_values(array_unique([
-        config('ERP_EMAIL', 'prabhu@sribalajigears.com'),
-        'prabhu@sribalajigears.com',
-        'erp@sribalajigears.com'
-    ]));
-
+    // Send Dedicated Notification Email to Prabhu
     sendErpNotificationEmail(
-        $plantRecipients, $refId, $name, $company, $email, $phone,
+        'prabhu@sribalajigears.com', $refId, $name, $company, $email, $phone,
+        $projectType, $otherCategory, $quantity, $message,
+        $attachmentName, $attachmentAbsPath, $appUrl
+    );
+
+    // Send Dedicated Notification Email to ERP desk
+    sendErpNotificationEmail(
+        'erp@sribalajigears.com', $refId, $name, $company, $email, $phone,
         $projectType, $otherCategory, $quantity, $message,
         $attachmentName, $attachmentAbsPath, $appUrl
     );
