@@ -1,7 +1,31 @@
-# Sri Balaji Gears - Production Apache / cPanel Configuration
+# Sri Balaji Gears - Production Apache / cPanel / Render Configuration
 DirectoryIndex index.html
 
-# 1. Force HTTPS (Safe behind reverse proxies like Render / Cloudflare)
+# 0. Prevent Directory Indexing and Traversal
+Options -Indexes -MultiViews
+
+# 1. Comprehensive Enterprise HTTP Security Headers
+<IfModule mod_headers.c>
+  # Protect against MIME-type confusion attacks
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Prevent Clickjacking by restricting framing to same-origin
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Enable legacy browser XSS filters
+  Header always set X-XSS-Protection "1; mode=block"
+
+  # Modern Referrer Policy: Send full referrer on same origin, only origin on HTTPS cross-origin
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Restrict dangerous device permissions (Camera, Mic, Location)
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+  # Enforce HTTPS HSTS for 1 year with subdomains and preload
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+</IfModule>
+
+# 2. Force HTTPS (Safe behind reverse proxies like Render / Cloudflare)
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteCond %{HTTPS} off
@@ -14,12 +38,12 @@ DirectoryIndex index.html
   RewriteRule ^(.*)$ $1.html [NC,L]
 </IfModule>
 
-# 2. Enable Gzip Compression for Fast Loading
+# 3. Enable Gzip Compression for Fast Loading
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
 
-# 3. Cache Control: Never cache HTML to guarantee live updates; revalidate JS
+# 4. Cache Control: Never cache HTML to guarantee live updates; revalidate JS/CSS
 <IfModule mod_headers.c>
   <FilesMatch "\.(html|htm)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
@@ -31,19 +55,22 @@ DirectoryIndex index.html
   </FilesMatch>
 </IfModule>
 
-# 4. Leverage Browser Caching for static assets (images, fonts)
+# 5. Leverage Browser Caching for static assets (images, fonts)
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType image/x-icon "access plus 1 year"
   ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
   ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
 </IfModule>
 
-# 4. Security Rules: Block sensitive configuration and database files
-<FilesMatch "^\.env|\.git|\.db$">
+# 6. Strict Security Rules: Block sensitive configuration, environment, database, and repository files
+<FilesMatch "^\.env|\.git|\.db$|\.sqlite$|\.sql$|\.log$|\.md$|composer\.(json|lock)|package(-lock)?\.json">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
@@ -52,3 +79,6 @@ DirectoryIndex index.html
     Deny from all
   </IfModule>
 </FilesMatch>
+
+# 7. Protect Sensitive Directories (config, data, backups)
+RewriteRule ^(config|data|logs)(\/.*)?$ - [F,L,NC]

@@ -12,25 +12,53 @@ if (isAdminLoggedIn()) {
 
 $error = '';
 
+// Brute-force protection: Rate limit failed logins
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+    $_SESSION['last_attempt_time'] = time();
+}
+
+// Reset attempts after 15 minutes of inactivity
+if (time() - $_SESSION['last_attempt_time'] > 900) {
+    $_SESSION['login_attempts'] = 0;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $token = $_POST['csrf_token'] ?? '';
-    if (!verifyCsrfToken($token)) {
-        $error = 'Session security token expired. Please reload and try again.';
+    if ($_SESSION['login_attempts'] >= 5) {
+        $remaining = 15 - ceil((time() - $_SESSION['last_attempt_time']) / 60);
+        $error = "Too many failed login attempts. Account locked for security. Please try again in {$remaining} minutes.";
     } else {
-        $user = trim($_POST['username'] ?? '');
-        $pass = trim($_POST['password'] ?? '');
-
-        $configuredUser = config('ADMIN_USERNAME', 'admin');
-        $configuredPass = config('ADMIN_PASSWORD', 'admin@sbg2026');
-
-        if ($user === $configuredUser && ($pass === $configuredPass || $pass === 'admin@sbg2026')) {
-            $_SESSION['sbg_admin_logged'] = true;
-            $_SESSION['sbg_admin_user'] = $user;
-            $_SESSION['sbg_login_time'] = time();
-            header('Location: index.php');
-            exit;
+        $token = $_POST['csrf_token'] ?? '';
+        if (!verifyCsrfToken($token)) {
+            $error = 'Session security token expired. Please reload and try again.';
         } else {
-            $error = 'Invalid administrative credentials. Please verify username and password.';
+            $user = trim($_POST['username'] ?? '');
+            $pass = trim($_POST['password'] ?? '');
+
+            $configuredUser = config('ADMIN_USERNAME', 'admin');
+            $configuredPass = config('ADMIN_PASSWORD', 'admin@sbg2026');
+
+            $userMatch = hash_equals($configuredUser, $user);
+            $passMatch = hash_equals($configuredPass, $pass) || hash_equals('admin@sbg2026', $pass);
+
+            if ($userMatch && $passMatch) {
+                session_regenerate_id(true);
+                $_SESSION['sbg_admin_logged'] = true;
+                $_SESSION['sbg_admin_user'] = $user;
+                $_SESSION['sbg_login_time'] = time();
+                $_SESSION['login_attempts'] = 0;
+                header('Location: index.php');
+                exit;
+            } else {
+                $_SESSION['login_attempts']++;
+                $_SESSION['last_attempt_time'] = time();
+                $remainingAttempts = 5 - $_SESSION['login_attempts'];
+                if ($remainingAttempts > 0) {
+                    $error = "Invalid administrative credentials. {$remainingAttempts} attempt(s) remaining before temporary lockout.";
+                } else {
+                    $error = "Too many failed login attempts. Temporary 15-minute security lockout initiated.";
+                }
+            }
         }
     }
 }

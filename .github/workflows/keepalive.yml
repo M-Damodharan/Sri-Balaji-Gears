@@ -1,0 +1,24 @@
+name: 24/7 Server Health & Keep-Alive Ping
+
+on:
+  schedule:
+    # Trigger every 10 minutes around the clock
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Production Health Endpoint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health Check Ping
+        run: |
+          echo "Pinging Sri Balaji Gears production health check..."
+          HTTP_STATUS=$(curl -s -o response.txt -w "%{http_code}" https://sribalajigears.in/api/health.php)
+          echo "HTTP Response Status: $HTTP_STATUS"
+          cat response.txt
+          if [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "::warning ::Server returned status $HTTP_STATUS"
+            exit 1
+          fi
+          echo "Server is healthy and active 24/7."
