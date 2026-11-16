@@ -341,17 +341,16 @@ h1 em, h2 em, h3 em, .highlight-gold {
 }
 
 .nav {
-  height: 78px;
+  height: 76px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: clamp(14px, 1.8vw, 32px);
   width: 100%;
-  transition: height var(--transition-base);
 }
 
 .header.scrolled .nav {
-  height: 68px;
+  height: 76px;
 }
 
 /* Brand Identity */
@@ -360,21 +359,34 @@ h1 em, h2 em, h3 em, .highlight-gold {
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  z-index: 10;
   outline: none;
 }
 
 .brand-emblem {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px rgba(239, 173, 45, 0.35));
-  transition: transform var(--transition-fast);
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+  /* Fixed Stationary Logo: Strictly No floating, rotating, bouncing, or moving animations */
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 .brand:hover .brand-emblem {
-  transform: rotate(18deg) scale(1.05);
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 .brand-text-block {
@@ -2466,14 +2478,16 @@ footer {
     display: none;
   }
   .nav {
-    height: 70px;
+    height: 68px;
   }
   .header.scrolled .nav {
-    height: 64px;
+    height: 68px;
   }
   .brand-emblem {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
+    transform: none !important;
+    transition: none !important;
   }
   .brand-title {
     font-size: 1.15rem;
