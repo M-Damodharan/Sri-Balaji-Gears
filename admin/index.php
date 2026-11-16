@@ -303,7 +303,7 @@ $attachmentCount = (int)$pdo->query("SELECT COUNT(*) FROM enquiries WHERE attach
         <option value="3-Seat Bus Assembly Frame Welding" <?= $categoryFilter === '3-Seat Bus Assembly Frame Welding' ? 'selected' : '' ?>>3-Seat Bus Frame</option>
         <option value="2-Seat Luxury Passenger Frame" <?= $categoryFilter === '2-Seat Luxury Passenger Frame' ? 'selected' : '' ?>>2-Seat Luxury Frame</option>
         <option value="Auto Body Frame Chassis Welding" <?= $categoryFilter === 'Auto Body Frame Chassis Welding' ? 'selected' : '' ?>>Auto Body & Chassis</option>
-        <option value="Heavy Pressing & Stamping (50T-250T)" <?= $categoryFilter === 'Heavy Pressing & Stamping (50T-250T)' ? 'selected' : '' ?>>Heavy Pressing & Stamping</option>
+        <option value="Heavy Pressing & Stamping (50T-300T)" <?= $categoryFilter === 'Heavy Pressing & Stamping (50T-300T)' ? 'selected' : '' ?>>Heavy Pressing & Stamping (50T-300T)</option>
         <option value="Custom Welding & Jigs" <?= $categoryFilter === 'Custom Welding & Jigs' ? 'selected' : '' ?>>Custom Welding & Jigs</option>
         <option value="Plant Audit & Vendor Onboarding" <?= $categoryFilter === 'Plant Audit & Vendor Onboarding' ? 'selected' : '' ?>>Plant Audit</option>
         <option value="Others" <?= $categoryFilter === 'Others' ? 'selected' : '' ?>>Others</option>

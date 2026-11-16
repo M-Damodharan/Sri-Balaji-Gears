@@ -128,7 +128,7 @@ Ensure your Google Business Profile matches the website structured data exactly:
 The website is already built with enterprise structured data compliant with schema.org:
 
 1. **Organization & AutomotiveBusiness Schema** (in [`index.html`](./index.html)):
-   - Declares official legal entity name, Hosur SIPCOT address, official logo, telephone, and industrial capabilities (`knowsAbout`: Bus Seat Frame Assemblies, MIG/TIG Welding, 50T–250T Press Stamping, IATF 16949 Standards).
+   - Declares official legal entity name, Hosur SIPCOT address, official logo, telephone, and industrial capabilities (`knowsAbout`: Bus Seat Frame Assemblies, MIG/TIG Welding, 50T–300T Press Stamping, IATF 16949 Standards).
 2. **BreadcrumbList Schema** (across all 8 subpages):
    - Enables hierarchical navigation snippets directly in Google search result listings.
 3. **Open Graph & Twitter Cards**:

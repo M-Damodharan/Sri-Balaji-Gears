@@ -39,9 +39,9 @@ A modern, production-grade corporate website and RFQ enquiry management portal f
 ## 🏭 Company Profile Parameters
 
 - **Legal Entity**: Sri Balaji Gears
-- **Established**: 1999 (25+ years continuous manufacturing)
+- **Established**: 2001 (23+ years continuous manufacturing)
 - **Workforce**: 400 Employees
-- **Campus Area**: 70,000 Sq. Ft. Total Land Area | 50,000 Sq. Ft. Built-up
+- **Campus Area**: 43,600 Sq. Ft. Total Land Area | 35,000 Sq. Ft. Built-up
 - **Location**: SIPCOT Industrial Complex Phase I, Hosur, Tamil Nadu 635126, India
 - **Coordinates**: 12.7409° N, 77.8253° E
 - **Corporate Email**: [erp@sribalajigears.com](mailto:erp@sribalajigears.com)
@@ -49,7 +49,7 @@ A modern, production-grade corporate website and RFQ enquiry management portal f
 - **Domain**: [sribalajigears.in](https://www.sribalajigears.in)
 - **Key OEM Customers**:
   - **UNO MINDA**: Dedicated bus seat frame welding (~90% specialized work focus)
-  - **TVS Motor Company**: Auto body frame welding parts (~50% automotive focus)
+  - **TVS Motor Company**: TVS Export Packing Structure
 
 ---
 
