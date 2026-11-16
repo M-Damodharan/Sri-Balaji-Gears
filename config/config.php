@@ -15,6 +15,15 @@ if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.cookie_samesite', 'Lax');
 }
 
+// Enterprise HTTP Security Headers
+if (!headers_sent()) {
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('X-XSS-Protection: 1; mode=block');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
+}
+
 // 1. Load .env file if it exists
 function loadEnv($filePath) {
     if (!file_exists($filePath) || !is_readable($filePath)) {
