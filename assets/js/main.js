@@ -414,7 +414,7 @@
       if (statusEl) {
         statusEl.className = 'form-status info';
         statusEl.style.display = 'block';
-        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; specifications directly to ERP engineering desk...`;
+        statusEl.innerHTML = `<span class="spinner"></span> Transmitting enquiry &amp; specifications directly to Senior Engineering desk...`;
       }
 
       const formData = new FormData(enquiryForm);

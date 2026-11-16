@@ -209,11 +209,11 @@ try {
         $enquiryId = (int)$idStmt->fetchColumn();
     }
 
-    // 6. Direct Dispatch of ERP Notification and Customer Confirmation Receipt
+    // 6. Direct Dispatch of Senior Engineering Notification and Customer Confirmation Receipt
     // FastCGI connection flush delivers instant JSON response to user while PHP finishes email delivery
     $responsePayload = json_encode([
         'success' => true,
-        'message' => 'Thank you! Your enquiry has been successfully transmitted directly to our ERP engineering desk.',
+        'message' => 'Thank you! Your enquiry has been successfully transmitted directly to our Senior Engineering desk.',
         'reference_id' => $refId
     ]);
 

@@ -224,7 +224,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
           </div>
           <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #efad2d; border-radius:6px; padding:16px 18px; font-size:14px; line-height:1.6; color:#1e293b; white-space:pre-wrap; margin-bottom:22px;">{message}</div>
 
-          <!-- Quick Action Buttons for ERP Engineering Team -->
+          <!-- Quick Action Buttons for Senior Engineering Team -->
           <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px;">
             <tr>
               <td align="center">
@@ -375,7 +375,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
           
           <h2 style="margin-top:0; font-size:18px; color:#0f172a; font-weight:800;">Thank You for Your RFQ Enquiry</h2>
           <p>Dear <strong>{name}</strong>,</p>
-          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong>. Your technical parameters and component requirements have been officially registered in our Hosur plant ERP engineering system with Reference ID: <strong style="color:#92400e; font-family:monospace;">{ref_id}</strong>.</p>
+          <p>Thank you for submitting your Request for Quotation (RFQ) for <strong>{company}</strong>. Your technical parameters and component requirements have been officially registered in our Hosur plant Senior Engineering system with Reference ID: <strong style="color:#92400e; font-family:monospace;">{ref_id}</strong>.</p>
 
           <!-- Highlighted Official Tracking Banner -->
           <div style="background-color:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; border-radius:6px; padding:14px 18px; margin:16px 0;">
@@ -432,7 +432,7 @@ def dispatch_emails(ref_id, name, company, email, phone, project_type, custom_ca
           <p>A Senior Tooling &amp; Welding Engineer has been assigned to inspect your component parameters. We will contact you at <strong>{phone}</strong> or <strong>{email}</strong> with our formal techno-commercial proposal.</p>
 
           <p style="margin-top:24px; margin-bottom:0;">Warm regards,<br>
-            <strong>Technical Sales &amp; ERP Engineering Team</strong><br>
+            <strong>Technical Sales &amp; Senior Engineering Team</strong><br>
             <span style="color:#64748b; font-size:13px;">Sri Balaji Gears · SIPCOT Industrial Complex, Hosur</span>
           </p>
 
@@ -595,7 +595,7 @@ class SBGRequestHandler(SimpleHTTPRequestHandler):
 
                 resp_obj = {
                     "success": True,
-                    "message": "Thank you! Your enquiry has been successfully transmitted directly to our ERP engineering desk.",
+                    "message": "Thank you! Your enquiry has been successfully transmitted directly to our Senior Engineering desk.",
                     "reference_id": ref_id
                 }
 
