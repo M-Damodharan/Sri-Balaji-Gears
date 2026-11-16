@@ -220,7 +220,7 @@ function sendErpNotificationEmail($to, $refId, $name, $company, $email, $phone, 
           <div style='font-weight:700; color:#f8fafc; font-size:13px; margin-bottom:4px;'>SRI BALAJI GEARS</div>
           <div>SIPCOT Industrial Complex, Phase I · Hosur, Tamil Nadu 635126, India</div>
           <div style='color:#64748b; font-size:11px; margin-top:5px;'>
-            IATF 16949 Aligned · ISO 9001:2015 · Automated ERP Web Transmission System
+            IATF 16949 Aligned · ISO 9001:2015
           </div>
         </td>
       </tr>
