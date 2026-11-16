@@ -4,7 +4,7 @@
    Fully Responsive for Mobile, Tablet, Laptop, Desktop & Ultra-wide
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+/* Web Fonts are preconnected & linked directly in HTML <head> for zero-render-blocking parallel downloads */
 
 /* --- Design Tokens --- */
 :root {
@@ -432,30 +432,46 @@ h1 em, h2 em, h3 em, .highlight-gold {
   color: var(--ink-secondary);
   border-radius: var(--radius-xs);
   position: relative;
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
   white-space: nowrap;
+}
+
+.menu a::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--gold-gradient);
+  border-radius: var(--radius-pill);
+  transition: left var(--transition-fast), right var(--transition-fast), opacity var(--transition-fast);
+  opacity: 0;
 }
 
 .menu a:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.menu a:hover::after {
+  left: 14px;
+  right: 14px;
+  opacity: 0.7;
 }
 
 .menu a.active {
   color: var(--gold-300);
   font-weight: 700;
-  background: rgba(239, 173, 45, 0.1);
+  background: rgba(239, 173, 45, 0.12);
+  border: 1px solid rgba(239, 173, 45, 0.25);
 }
 
 .menu a.active::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
   left: 12px;
   right: 12px;
-  height: 2px;
-  background: var(--gold-gradient);
-  border-radius: var(--radius-pill);
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(239, 173, 45, 0.6);
 }
 
 /* Nav Actions */
@@ -647,20 +663,22 @@ body.drawer-open {
   cursor: pointer;
   background: var(--gold-gradient);
   color: #0c1524;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(239, 173, 45, 0.28), var(--shadow-inner);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 16px rgba(239, 173, 45, 0.3), var(--shadow-inner);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
   white-space: nowrap;
 }
 
 .button:hover, .nav-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(239, 173, 45, 0.42), var(--shadow-inner);
+  box-shadow: 0 8px 28px rgba(239, 173, 45, 0.46), 0 0 16px rgba(239, 173, 45, 0.25);
   color: #040912;
+  filter: brightness(1.04);
 }
 
 .button:active, .nav-button:active {
-  transform: translateY(0);
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 2px 8px rgba(239, 173, 45, 0.3);
 }
 
 .button.ghost {
@@ -1474,7 +1492,7 @@ body.drawer-open {
 
 .tab-content {
   display: none;
-  animation: fadeInTab 0.35s ease-out forwards;
+  animation: fadeInTab 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   padding-top: 24px;
 }
 

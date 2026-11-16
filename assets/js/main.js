@@ -116,7 +116,7 @@
     });
   }
 
-  // 5. Scroll Reveal with IntersectionObserver
+  // 5. Scroll Reveal with IntersectionObserver (Butter-Smooth Hardware Accelerated)
   const revealElements = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver(
@@ -125,10 +125,14 @@
           if (entry.isIntersecting) {
             entry.target.classList.add('show');
             observer.unobserve(entry.target);
+            // Free GPU memory after transition completes
+            setTimeout(() => {
+              if (entry.target) entry.target.style.willChange = 'auto';
+            }, 700);
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px 80px 0px' }
     );
     revealElements.forEach((el) => revealObserver.observe(el));
   } else {
@@ -570,5 +574,28 @@
       }
     });
   }
+
+  // 12. Instant Speculative Page Prefetcher (Zero-Latency Navigation & Instant Page Refreshes)
+  const prefetchedPages = new Set();
+  function prefetchPage(url) {
+    if (!url || prefetchedPages.has(url) || url.startsWith('#') || url.startsWith('mailto:') || url.startsWith('tel:') || url.startsWith('javascript:')) return;
+    try {
+      const parsed = new URL(url, window.location.href);
+      if (parsed.origin !== window.location.origin) return;
+      if (!parsed.pathname.endsWith('.html') && parsed.pathname !== '/') return;
+      prefetchedPages.add(url);
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.as = 'document';
+      link.href = url;
+      document.head.appendChild(link);
+    } catch (e) {}
+  }
+
+  // Speculatively prefetch target page on hover or touch start (<50ms load feel)
+  document.querySelectorAll('a[href]').forEach((link) => {
+    link.addEventListener('mouseenter', () => prefetchPage(link.getAttribute('href')), { passive: true });
+    link.addEventListener('touchstart', () => prefetchPage(link.getAttribute('href')), { passive: true });
+  });
 
 })();
