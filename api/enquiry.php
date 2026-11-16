@@ -209,36 +209,25 @@ try {
         $enquiryId = (int)$idStmt->fetchColumn();
     }
 
-    // 6. Spawn Detached Asynchronous Background Dispatch Worker
-    // Delivers internal notification to erp@ and confirmation receipt to customer in background
-    // without blocking the user's browser for 30-50 seconds.
-    $phpBin = (defined('PHP_BINARY') && is_executable(PHP_BINARY) && strpos(PHP_BINARY, 'php') !== false) ? PHP_BINARY : 'php';
-    if (!is_executable($phpBin) && file_exists('/usr/local/bin/php')) {
-        $phpBin = '/usr/local/bin/php';
-    }
-
-    $worker = escapeshellarg(__DIR__ . '/dispatch.php');
-    $argId = (int)$enquiryId;
-    $cmd = "{$phpBin} {$worker} {$argId} > /dev/null 2>&1 &";
-
-    $dispatched = false;
-    if (function_exists('exec')) {
-        @exec($cmd);
-        $dispatched = true;
-    }
-
-    // Fallback if exec is disabled in restricted environments
-    if (!$dispatched && $enquiryId > 0) {
-        require_once __DIR__ . '/mail_helper.php';
-        dispatchEnquiryEmails($enquiryId);
-    }
-
-    // 7. Return Instant Sub-Second JSON Success Response (<100ms)
-    echo json_encode([
+    // 6. Direct Dispatch of ERP Notification and Customer Confirmation Receipt
+    // FastCGI connection flush delivers instant JSON response to user while PHP finishes email delivery
+    $responsePayload = json_encode([
         'success' => true,
         'message' => 'Thank you! Your enquiry has been successfully transmitted directly to our ERP engineering desk.',
         'reference_id' => $refId
     ]);
+
+    if (function_exists('fastcgi_finish_request')) {
+        echo $responsePayload;
+        fastcgi_finish_request();
+    }
+
+    require_once __DIR__ . '/mail_helper.php';
+    dispatchEnquiryEmails($enquiryId);
+
+    if (!function_exists('fastcgi_finish_request')) {
+        echo $responsePayload;
+    }
     exit;
 
 } catch (Exception $e) {
