@@ -105,11 +105,11 @@ export default async function handler(req, res) {
     const randStr = Math.floor(1000 + Math.random() * 9000).toString();
     const referenceId = `SBG-RFQ-${dateStr}-${randStr}`;
 
-    // Prepare Brevo email payload (configured via Vercel Environment Variables)
     const brevoApiKey = process.env.BREVO_API_KEY;
     const targetEmail = process.env.ERP_EMAIL || 'erp@sribalajigears.com';
 
-    const htmlContent = `
+    // 2. Email HTML Template for Plant / Engineering Desk
+    const plantHtml = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -159,33 +159,144 @@ export default async function handler(req, res) {
 </html>
     `;
 
-    // Dispatch via Brevo API if key configured
+    // 3. Email HTML Template for Customer Confirmation Receipt
+    const clientHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Thank You for Your RFQ [${referenceId}] - Sri Balaji Gears</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0b1320; font-family:'Segoe UI', Roboto, Arial, sans-serif; color:#1e293b;">
+  <center style="width:100%; background-color:#0b1320; padding:24px 0;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:620px; background-color:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 10px 25px rgba(0,0,0,0.3); border:1px solid #1e293b;">
+      <tr>
+        <td height="4" style="background:linear-gradient(90deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%); line-height:4px; font-size:4px;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="background-color:#07111e; padding:24px 28px; border-bottom:2px solid #efad2d;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td>
+                <div style="font-size:22px; font-weight:800; color:#ffffff; letter-spacing:0.04em;">
+                  SRI BALAJI <span style="color:#efad2d;">GEARS</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-top:4px;">
+                  Tier-1 Automotive Seating &amp; Chassis Welded Assemblies · Hosur
+                </div>
+              </td>
+              <td align="right">
+                <span style="display:inline-block; padding:6px 12px; background:rgba(16, 185, 129, 0.15); border:1px solid #10b981; border-radius:20px; color:#34d399; font-size:11px; font-weight:700; text-transform:uppercase;">
+                  ✓ RFQ LOGGED
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#f8fafc; padding:18px 28px; border-bottom:1px solid #e2e8f0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td>
+                <div style="font-size:11px; font-weight:800; color:#b45309; text-transform:uppercase; letter-spacing:0.08em;">OFFICIAL TRACKING REFERENCE ID</div>
+                <div style="font-size:19px; font-weight:900; color:#0f172a; font-family:monospace; margin-top:4px;">
+                  <span style="background:#fef3c7; color:#92400e; padding:4px 12px; border-radius:6px; border:1px solid #fde68a;">${referenceId}</span>
+                </div>
+              </td>
+              <td align="right">
+                <div style="font-size:11px; font-weight:800; color:#065f46; text-transform:uppercase; letter-spacing:0.08em;">REVIEW STATUS</div>
+                <div style="font-size:13px; font-weight:800; color:#059669; margin-top:4px;">
+                  Under Engineering Appraisal (24–48h)
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:28px 28px 20px 28px; line-height:1.6; color:#334155; font-size:14px;">
+          <p style="margin:0 0 16px 0; font-size:15px; color:#0f172a;">
+            Dear <strong>${name}</strong>,
+          </p>
+          <p style="margin:0 0 16px 0;">
+            Thank you for reaching out to <strong>Sri Balaji Gears</strong>. Your quotation enquiry for <strong>${category}</strong> has been logged in our engineering desk.
+          </p>
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background:#f1f5f9; border-radius:8px; padding:12px; margin-bottom:20px;">
+            <tr><td style="padding:6px 10px; font-weight:bold; color:#475569; width:35%;">Company:</td><td style="padding:6px 10px; color:#0f172a;">${company || 'Not specified'}</td></tr>
+            <tr><td style="padding:6px 10px; font-weight:bold; color:#475569;">Category:</td><td style="padding:6px 10px; color:#0f172a;">${category}</td></tr>
+            <tr><td style="padding:6px 10px; font-weight:bold; color:#475569;">Volume / Batch:</td><td style="padding:6px 10px; color:#0f172a;">${volume}</td></tr>
+            ${fileAttachment ? `<tr><td style="padding:6px 10px; font-weight:bold; color:#475569;">Technical Drawing:</td><td style="padding:6px 10px; color:#059669; font-weight:bold;">📎 ${fileAttachment.filename} (Received)</td></tr>` : ''}
+          </table>
+          <p style="margin:0 0 8px 0; font-size:13px; color:#64748b;">
+            Our technical review team is evaluating your requirements against our press fleet (50T–300T) and robotic welding capabilities. You will receive our formal quotation within <strong>24 to 48 business hours</strong>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#07111e; padding:20px 28px; text-align:center; color:#94a3b8; font-size:12px;">
+          <div style="color:#ffffff; font-weight:700; font-size:13px; margin-bottom:4px;">Sri Balaji Gears · Manufacturing Facility</div>
+          <div>SF No. 138/4, Belagondapalli Village, Thally Road, Denkanikottai Taluk, Krishnagiri Dist, Tamil Nadu - 635114</div>
+          <div style="margin-top:6px; color:#efad2d;">Direct Engineering Line: +91 73733 34411 · erp@sribalajigears.com</div>
+        </td>
+      </tr>
+    </table>
+  </center>
+</body>
+</html>
+    `;
+
+    // 4. Dispatch Emails via Brevo API
     if (brevoApiKey) {
       try {
-        const emailPayload = {
+        // A) Email to Plant & Senior Management (with CC to damodharan390@gmail.com for redundancy)
+        const plantEmailPayload = {
           sender: { name: 'Sri Balaji Gears RFQ Portal', email: 'erp@sribalajigears.com' },
           to: [{ email: targetEmail }],
+          cc: [{ email: 'damodharan390@gmail.com' }],
           replyTo: { email: email, name: name },
           subject: `[NEW RFQ] ${category} - ${company || name} [${referenceId}]`,
-          htmlContent: htmlContent
+          htmlContent: plantHtml
         };
 
         if (fileAttachment && fileAttachment.data) {
-          emailPayload.attachment = [{
+          plantEmailPayload.attachment = [{
             name: fileAttachment.filename,
             content: fileAttachment.data.toString('base64')
           }];
         }
 
-        await fetch('https://api.brevo.com/v3/smtp/email', {
+        const plantPromise = fetch('https://api.brevo.com/v3/smtp/email', {
           method: 'POST',
           headers: {
             'api-key': brevoApiKey,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify(emailPayload)
+          body: JSON.stringify(plantEmailPayload)
         });
+
+        // B) Official Confirmation Receipt to the Customer
+        const clientEmailPayload = {
+          sender: { name: 'Sri Balaji Gears', email: 'erp@sribalajigears.com' },
+          to: [{ email: email, name: name }],
+          replyTo: { name: 'Sri Balaji Gears Engineering Desk', email: 'erp@sribalajigears.com' },
+          subject: `Quotation Enquiry Received [${referenceId}] | Sri Balaji Gears`,
+          htmlContent: clientHtml
+        };
+
+        const clientPromise = fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'api-key': brevoApiKey,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(clientEmailPayload)
+        });
+
+        // Execute both concurrently
+        await Promise.allSettled([plantPromise, clientPromise]);
       } catch (mailErr) {
         console.error('Brevo API dispatch warning:', mailErr);
       }
