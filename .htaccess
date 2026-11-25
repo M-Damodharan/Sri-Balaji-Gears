@@ -28,6 +28,9 @@ Options -Indexes -MultiViews
 # 2. Force HTTPS (Safe behind reverse proxies like Render / Cloudflare)
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Route legacy api/*.php requests to api_php/*.php
+  RewriteRule ^api/(.*\.php)$ api_php/$1 [L,QSA]
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
