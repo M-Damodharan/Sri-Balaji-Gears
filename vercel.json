@@ -1,6 +1,10 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/api/enquiry.php", "destination": "/api/enquiry" },
+    { "source": "/api/health.php", "destination": "/api/health" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

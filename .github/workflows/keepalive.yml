@@ -14,7 +14,7 @@ jobs:
       - name: Health Check Ping
         run: |
           echo "Pinging Sri Balaji Gears production health check..."
-          HTTP_STATUS=$(curl -s -o response.txt -w "%{http_code}" https://sribalajigears.in/api/health.php)
+          HTTP_STATUS=$(curl -sL -o response.txt -w "%{http_code}" https://www.sribalajigears.in/api/health.php)
           echo "HTTP Response Status: $HTTP_STATUS"
           cat response.txt
           if [ "$HTTP_STATUS" -ne 200 ]; then
