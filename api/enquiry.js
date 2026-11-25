@@ -1,3 +1,42 @@
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};
+
+async function getRawBody(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+function parseMultipart(buffer, boundary) {
+  const result = {};
+  const str = buffer.toString('latin1');
+  const parts = str.split('--' + boundary);
+  for (const part of parts) {
+    const match = part.match(/Content-Disposition:\s*form-data;\s*name="([^"]+)"(?:;\s*filename="([^"]+)")?/i);
+    if (!match) continue;
+    const name = match[1];
+    const filename = match[2];
+    const headerEndIndex = part.indexOf('\r\n\r\n');
+    if (headerEndIndex === -1) continue;
+    let data = part.substring(headerEndIndex + 4);
+    if (data.endsWith('\r\n')) data = data.slice(0, -2);
+    if (filename) {
+      result[name] = {
+        filename: filename,
+        data: Buffer.from(data, 'latin1')
+      };
+    } else {
+      result[name] = Buffer.from(data, 'latin1').toString('utf-8').trim();
+    }
+  }
+  return result;
+}
+
 export default async function handler(req, res) {
   // Enterprise CORS & Security Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,15 +52,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    let body = req.body;
-    if (typeof body === 'string') {
-      try {
-        body = JSON.parse(body);
-      } catch (e) {
-        body = Object.fromEntries(new URLSearchParams(body));
+    const rawBuffer = await getRawBody(req);
+    const contentType = req.headers['content-type'] || '';
+    let body = {};
+    let fileAttachment = null;
+
+    if (contentType.includes('multipart/form-data')) {
+      const boundaryMatch = contentType.match(/boundary=(?:["']?)([^"';]+)/i);
+      if (boundaryMatch) {
+        body = parseMultipart(rawBuffer, boundaryMatch[1]);
+        if (body.attachment && body.attachment.filename) {
+          fileAttachment = body.attachment;
+        } else if (body.drawing && body.drawing.filename) {
+          fileAttachment = body.drawing;
+        }
       }
-    } else if (!body) {
-      body = {};
+    } else if (contentType.includes('application/json')) {
+      body = JSON.parse(rawBuffer.toString('utf-8') || '{}');
+    } else {
+      const str = rawBuffer.toString('utf-8');
+      body = Object.fromEntries(new URLSearchParams(str));
     }
 
     // 1. Anti-spam honeypot
@@ -96,6 +146,7 @@ export default async function handler(req, res) {
         <tr><td class="label">Requirement Category</td><td class="value"><strong>${category}</strong></td></tr>
         <tr><td class="label">Technical Specifications</td><td class="value">${specifications || 'Standard specifications'}</td></tr>
         <tr><td class="label">Volume / Batch Size</td><td class="value">${volume}</td></tr>
+        ${fileAttachment ? `<tr><td class="label">Uploaded Drawing</td><td class="value">📎 ${fileAttachment.filename}</td></tr>` : ''}
       </table>
       <div style="margin-top: 20px; font-weight: bold; color: #efad2d; font-size: 13px; text-transform: uppercase;">Technical Scope & Message</div>
       <div class="message-box">${message.replace(/\n/g, '<br>') || 'No additional message provided.'}</div>
@@ -108,25 +159,36 @@ export default async function handler(req, res) {
 </html>
     `;
 
-    // Dispatch via Brevo API
-    try {
-      await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'api-key': brevoApiKey,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
+    // Dispatch via Brevo API if key configured
+    if (brevoApiKey) {
+      try {
+        const emailPayload = {
           sender: { name: 'Sri Balaji Gears RFQ Portal', email: 'erp@sribalajigears.com' },
           to: [{ email: targetEmail }],
           replyTo: { email: email, name: name },
           subject: `[NEW RFQ] ${category} - ${company || name} [${referenceId}]`,
           htmlContent: htmlContent
-        })
-      });
-    } catch (mailErr) {
-      console.error('Brevo API dispatch warning:', mailErr);
+        };
+
+        if (fileAttachment && fileAttachment.data) {
+          emailPayload.attachment = [{
+            name: fileAttachment.filename,
+            content: fileAttachment.data.toString('base64')
+          }];
+        }
+
+        await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'api-key': brevoApiKey,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(emailPayload)
+        });
+      } catch (mailErr) {
+        console.error('Brevo API dispatch warning:', mailErr);
+      }
     }
 
     return res.status(200).json({
