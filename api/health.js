@@ -5,6 +5,8 @@ export default function handler(req, res) {
     status: 'healthy',
     service: 'Sri Balaji Gears Production Web Service (Vercel)',
     timestamp: new Date().toISOString(),
-    uptime: '24/7 active (100% Free Forever)'
+    uptime: '24/7 active (100% Free Forever)',
+    brevo_configured: Boolean(process.env.BREVO_API_KEY),
+    erp_email_configured: Boolean(process.env.ERP_EMAIL)
   });
 }
